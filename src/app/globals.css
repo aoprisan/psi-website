@@ -1,24 +1,24 @@
 @import "tailwindcss";
 
 :root {
-  /* Calming, professional color palette for psychologist website */
+  /* Warm autumn color palette for psychologist website */
   --background: #ffffff;
-  --foreground: #2d3748;
+  --foreground: #3e2723;
 
-  /* Primary - Soft Teal */
-  --primary: #5a9c8e;
-  --primary-light: #7ab5a8;
-  --primary-dark: #478275;
+  /* Primary - Warm Terracotta */
+  --primary: #c87651;
+  --primary-light: #db9271;
+  --primary-dark: #b05d3a;
 
-  /* Secondary - Dusty Mauve */
-  --secondary: #a78baf;
-  --secondary-light: #c1a8c7;
-  --secondary-dark: #8a6f92;
+  /* Secondary - Golden Amber */
+  --secondary: #d4a259;
+  --secondary-light: #e5b978;
+  --secondary-dark: #b88842;
 
-  /* Accent - Warm Sand */
-  --accent: #d4a574;
-  --accent-light: #e3bf95;
-  --accent-dark: #c08d5a;
+  /* Accent - Deep Burgundy */
+  --accent: #9b4f4f;
+  --accent-light: #b67070;
+  --accent-dark: #7d3838;
 
   /* Neutrals */
   --neutral-50: #f8f9fa;
