@@ -5,20 +5,20 @@
   --background: #ffffff;
   --foreground: #2d3748;
 
-  /* Primary - Calming Blue */
-  --primary: #4a90a4;
-  --primary-light: #6ba8bb;
-  --primary-dark: #357a8c;
+  /* Primary - Soft Teal */
+  --primary: #5a9c8e;
+  --primary-light: #7ab5a8;
+  --primary-dark: #478275;
 
-  /* Secondary - Soft Green */
-  --secondary: #7da87b;
-  --secondary-light: #9bbd99;
-  --secondary-dark: #5e8a5c;
+  /* Secondary - Dusty Mauve */
+  --secondary: #a78baf;
+  --secondary-light: #c1a8c7;
+  --secondary-dark: #8a6f92;
 
-  /* Accent - Warm Terracotta */
-  --accent: #c98474;
-  --accent-light: #dda195;
-  --accent-dark: #b56b5b;
+  /* Accent - Warm Sand */
+  --accent: #d4a574;
+  --accent-light: #e3bf95;
+  --accent-dark: #c08d5a;
 
   /* Neutrals */
   --neutral-50: #f8f9fa;
