@@ -26,19 +26,19 @@ const Header = () => {
           </Link>
 
           {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center space-x-8">
+          <div className="hidden md:flex items-center gap-8">
             {navigation.map((item) => (
               <Link
                 key={item.name}
                 href={item.href}
-                className="text-[var(--neutral-700)] hover:text-[var(--primary)] transition-colors duration-200 font-medium"
+                className="text-[var(--neutral-700)] hover:text-[var(--primary)] transition-colors duration-200 font-medium whitespace-nowrap"
               >
                 {item.name}
               </Link>
             ))}
             <Link
               href="/contact"
-              className="bg-[var(--primary)] text-white px-6 py-2 rounded-lg hover:bg-[var(--primary-dark)] transition-colors duration-200"
+              className="bg-[var(--primary)] text-white px-6 py-2 rounded-lg hover:bg-[var(--primary-dark)] transition-colors duration-200 whitespace-nowrap"
             >
               Book Appointment
             </Link>
@@ -71,7 +71,7 @@ const Header = () => {
         {/* Mobile Navigation */}
         {isMenuOpen && (
           <div className="md:hidden mt-4 pb-4 border-t border-[var(--neutral-200)] pt-4">
-            <div className="flex flex-col space-y-3">
+            <div className="flex flex-col gap-3">
               {navigation.map((item) => (
                 <Link
                   key={item.name}
