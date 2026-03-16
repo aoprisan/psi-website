@@ -1,6 +1,45 @@
 'use client';
 
 import { useState } from 'react';
+import PageHeader from '@/components/ui/PageHeader';
+import Button from '@/components/ui/Button';
+
+interface FormErrors {
+  name?: string;
+  email?: string;
+  phone?: string;
+  subject?: string;
+  message?: string;
+}
+
+function validateEmail(email: string): boolean {
+  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
+}
+
+function validatePhone(phone: string): boolean {
+  if (!phone) return true; // optional field
+  return /^[\d\s()+-]{7,20}$/.test(phone);
+}
+
+function validateForm(data: { name: string; email: string; phone: string; subject: string; message: string }): FormErrors {
+  const errors: FormErrors = {};
+  if (!data.name.trim()) errors.name = 'Name is required';
+  if (!data.email.trim()) {
+    errors.email = 'Email is required';
+  } else if (!validateEmail(data.email)) {
+    errors.email = 'Please enter a valid email address';
+  }
+  if (data.phone && !validatePhone(data.phone)) {
+    errors.phone = 'Please enter a valid phone number';
+  }
+  if (!data.subject) errors.subject = 'Please select a subject';
+  if (!data.message.trim()) {
+    errors.message = 'Message is required';
+  } else if (data.message.trim().length < 10) {
+    errors.message = 'Message must be at least 10 characters';
+  }
+  return errors;
+}
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -10,52 +49,58 @@ export default function Contact() {
     subject: '',
     message: '',
   });
+  const [errors, setErrors] = useState<FormErrors>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [submitStatus, setSubmitStatus] = useState<'idle' | 'success' | 'error'>('idle');
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
-    setFormData((prev) => ({
-      ...prev,
-      [name]: value,
-    }));
+    setFormData((prev) => ({ ...prev, [name]: value }));
+    // Clear error for this field on change
+    if (errors[name as keyof FormErrors]) {
+      setErrors((prev) => ({ ...prev, [name]: undefined }));
+    }
   };
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
-    setIsSubmitting(true);
     setSubmitStatus('idle');
 
-    // Simulate form submission - replace with actual API call
+    const formErrors = validateForm(formData);
+    if (Object.keys(formErrors).length > 0) {
+      setErrors(formErrors);
+      return;
+    }
+
+    setErrors({});
+    setIsSubmitting(true);
+
     try {
-      await new Promise((resolve) => setTimeout(resolve, 1500));
-      console.log('Form submitted:', formData);
-      setSubmitStatus('success');
-      setFormData({
-        name: '',
-        email: '',
-        phone: '',
-        subject: '',
-        message: '',
+      const res = await fetch('/api/contact', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify(formData),
       });
-    } catch (error) {
+
+      if (!res.ok) throw new Error('Failed to send');
+
+      setSubmitStatus('success');
+      setFormData({ name: '', email: '', phone: '', subject: '', message: '' });
+    } catch {
       setSubmitStatus('error');
     } finally {
       setIsSubmitting(false);
     }
   };
 
+  const fieldError = (field: keyof FormErrors) =>
+    errors[field] ? (
+      <p className="text-red-600 text-sm mt-1" role="alert">{errors[field]}</p>
+    ) : null;
+
   return (
     <div>
-      {/* Page Header */}
-      <section className="bg-[var(--primary)] text-white py-16">
-        <div className="container mx-auto px-6">
-          <h1 className="text-4xl md:text-5xl font-bold text-white">Contact Me</h1>
-          <p className="text-xl mt-4 text-white/90">
-            Take the first step - I'm here to help
-          </p>
-        </div>
-      </section>
+      <PageHeader title="Contact Me" subtitle="Take the first step - I'm here to help" />
 
       {/* Contact Content */}
       <section className="section-padding bg-white">
@@ -65,7 +110,7 @@ export default function Contact() {
             <div>
               <h2 className="text-3xl font-bold mb-6">Get in Touch</h2>
               <p className="text-lg text-[var(--neutral-700)] leading-relaxed mb-8">
-                Taking the first step towards therapy can feel overwhelming. I'm here to make the
+                Taking the first step towards therapy can feel overwhelming. I&apos;m here to make the
                 process as comfortable as possible. Feel free to reach out with any questions or
                 to schedule your initial consultation.
               </p>
@@ -74,24 +119,13 @@ export default function Contact() {
               <div className="space-y-6">
                 <div className="flex items-start">
                   <div className="w-12 h-12 bg-[var(--primary)]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg
-                      className="w-6 h-6 text-[var(--primary)]"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
+                    <svg className="w-6 h-6 text-[var(--primary)]" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                       <path d="M3 8l7.89 5.26a2 2 0 002.22 0L21 8M5 19h14a2 2 0 002-2V7a2 2 0 00-2-2H5a2 2 0 00-2 2v10a2 2 0 002 2z" />
                     </svg>
                   </div>
                   <div className="ml-4">
                     <h3 className="font-semibold text-lg mb-1">Email</h3>
-                    <a
-                      href="mailto:contact@psychologypractice.com"
-                      className="text-[var(--primary)] hover:text-[var(--primary-dark)] transition-colors"
-                    >
+                    <a href="mailto:contact@psychologypractice.com" className="text-[var(--primary)] hover:text-[var(--primary-dark)] transition-colors">
                       contact@psychologypractice.com
                     </a>
                   </div>
@@ -99,43 +133,22 @@ export default function Contact() {
 
                 <div className="flex items-start">
                   <div className="w-12 h-12 bg-[var(--secondary)]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg
-                      className="w-6 h-6 text-[var(--secondary)]"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
+                    <svg className="w-6 h-6 text-[var(--secondary)]" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                       <path d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
                     </svg>
                   </div>
                   <div className="ml-4">
                     <h3 className="font-semibold text-lg mb-1">Phone</h3>
-                    <a
-                      href="tel:+1234567890"
-                      className="text-[var(--primary)] hover:text-[var(--primary-dark)] transition-colors"
-                    >
+                    <a href="tel:+1234567890" className="text-[var(--primary)] hover:text-[var(--primary-dark)] transition-colors">
                       +1 (234) 567-890
                     </a>
-                    <p className="text-sm text-[var(--neutral-600)] mt-1">
-                      Mon-Fri: 9am - 6pm
-                    </p>
+                    <p className="text-sm text-[var(--neutral-600)] mt-1">Mon-Fri: 9am - 6pm</p>
                   </div>
                 </div>
 
                 <div className="flex items-start">
                   <div className="w-12 h-12 bg-[var(--accent)]/10 rounded-lg flex items-center justify-center flex-shrink-0">
-                    <svg
-                      className="w-6 h-6 text-[var(--accent)]"
-                      fill="none"
-                      strokeLinecap="round"
-                      strokeLinejoin="round"
-                      strokeWidth="2"
-                      viewBox="0 0 24 24"
-                      stroke="currentColor"
-                    >
+                    <svg className="w-6 h-6 text-[var(--accent)]" fill="none" strokeLinecap="round" strokeLinejoin="round" strokeWidth="2" viewBox="0 0 24 24" stroke="currentColor" aria-hidden="true">
                       <path d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                       <path d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                     </svg>
@@ -152,9 +165,7 @@ export default function Contact() {
 
               {/* Important Notice */}
               <div className="mt-8 p-6 bg-[var(--neutral-50)] rounded-xl border-l-4 border-[var(--accent)]">
-                <h4 className="font-semibold text-[var(--neutral-800)] mb-2">
-                  Crisis Support
-                </h4>
+                <h4 className="font-semibold text-[var(--neutral-800)] mb-2">Crisis Support</h4>
                 <p className="text-sm text-[var(--neutral-700)]">
                   If you are experiencing a mental health emergency, please call 911 or the National
                   Suicide Prevention Lifeline at 988 for immediate assistance.
@@ -165,7 +176,7 @@ export default function Contact() {
             {/* Contact Form */}
             <div className="bg-[var(--neutral-50)] p-8 rounded-2xl">
               <h2 className="text-2xl font-bold mb-6">Send a Message</h2>
-              <form onSubmit={handleSubmit} className="space-y-5">
+              <form onSubmit={handleSubmit} className="space-y-5" noValidate>
                 <div>
                   <label htmlFor="name" className="block text-sm font-medium text-[var(--neutral-800)] mb-2">
                     Full Name *
@@ -174,12 +185,16 @@ export default function Contact() {
                     type="text"
                     id="name"
                     name="name"
-                    required
                     value={formData.name}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-[var(--neutral-300)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent"
+                    aria-invalid={!!errors.name}
+                    aria-describedby={errors.name ? 'name-error' : undefined}
+                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent ${
+                      errors.name ? 'border-red-500' : 'border-[var(--neutral-300)]'
+                    }`}
                     placeholder="Your name"
                   />
+                  {errors.name && <p id="name-error" className="text-red-600 text-sm mt-1" role="alert">{errors.name}</p>}
                 </div>
 
                 <div>
@@ -190,12 +205,16 @@ export default function Contact() {
                     type="email"
                     id="email"
                     name="email"
-                    required
                     value={formData.email}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-[var(--neutral-300)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent"
+                    aria-invalid={!!errors.email}
+                    aria-describedby={errors.email ? 'email-error' : undefined}
+                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent ${
+                      errors.email ? 'border-red-500' : 'border-[var(--neutral-300)]'
+                    }`}
                     placeholder="your@email.com"
                   />
+                  {errors.email && <p id="email-error" className="text-red-600 text-sm mt-1" role="alert">{errors.email}</p>}
                 </div>
 
                 <div>
@@ -208,9 +227,14 @@ export default function Contact() {
                     name="phone"
                     value={formData.phone}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-[var(--neutral-300)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent"
+                    aria-invalid={!!errors.phone}
+                    aria-describedby={errors.phone ? 'phone-error' : undefined}
+                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent ${
+                      errors.phone ? 'border-red-500' : 'border-[var(--neutral-300)]'
+                    }`}
                     placeholder="(123) 456-7890"
                   />
+                  {errors.phone && <p id="phone-error" className="text-red-600 text-sm mt-1" role="alert">{errors.phone}</p>}
                 </div>
 
                 <div>
@@ -220,10 +244,13 @@ export default function Contact() {
                   <select
                     id="subject"
                     name="subject"
-                    required
                     value={formData.subject}
                     onChange={handleChange}
-                    className="w-full px-4 py-3 border border-[var(--neutral-300)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent"
+                    aria-invalid={!!errors.subject}
+                    aria-describedby={errors.subject ? 'subject-error' : undefined}
+                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent ${
+                      errors.subject ? 'border-red-500' : 'border-[var(--neutral-300)]'
+                    }`}
                   >
                     <option value="">Select a subject</option>
                     <option value="initial-consultation">Initial Consultation</option>
@@ -232,6 +259,7 @@ export default function Contact() {
                     <option value="insurance-question">Insurance Question</option>
                     <option value="other">Other</option>
                   </select>
+                  {errors.subject && <p id="subject-error" className="text-red-600 text-sm mt-1" role="alert">{errors.subject}</p>}
                 </div>
 
                 <div>
@@ -241,13 +269,17 @@ export default function Contact() {
                   <textarea
                     id="message"
                     name="message"
-                    required
                     value={formData.message}
                     onChange={handleChange}
                     rows={5}
-                    className="w-full px-4 py-3 border border-[var(--neutral-300)] rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent resize-none"
+                    aria-invalid={!!errors.message}
+                    aria-describedby={errors.message ? 'message-error' : undefined}
+                    className={`w-full px-4 py-3 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[var(--primary)] focus:border-transparent resize-none ${
+                      errors.message ? 'border-red-500' : 'border-[var(--neutral-300)]'
+                    }`}
                     placeholder="Tell me a bit about what brings you here..."
                   />
+                  {errors.message && <p id="message-error" className="text-red-600 text-sm mt-1" role="alert">{errors.message}</p>}
                 </div>
 
                 <button
@@ -258,17 +290,19 @@ export default function Contact() {
                   {isSubmitting ? 'Sending...' : 'Send Message'}
                 </button>
 
-                {submitStatus === 'success' && (
-                  <div className="p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg">
-                    Thank you for your message! I'll get back to you within 24-48 hours.
-                  </div>
-                )}
+                <div aria-live="polite">
+                  {submitStatus === 'success' && (
+                    <div className="p-4 bg-green-50 border border-green-200 text-green-800 rounded-lg" role="status">
+                      Thank you for your message! I&apos;ll get back to you within 24-48 hours.
+                    </div>
+                  )}
 
-                {submitStatus === 'error' && (
-                  <div className="p-4 bg-red-50 border border-red-200 text-red-800 rounded-lg">
-                    There was an error sending your message. Please try again or contact me directly.
-                  </div>
-                )}
+                  {submitStatus === 'error' && (
+                    <div className="p-4 bg-red-50 border border-red-200 text-red-800 rounded-lg" role="alert">
+                      There was an error sending your message. Please try again or contact me directly.
+                    </div>
+                  )}
+                </div>
 
                 <p className="text-sm text-[var(--neutral-600)]">
                   * Required fields. Your information will be kept strictly confidential.
@@ -288,12 +322,7 @@ export default function Contact() {
               Check out our frequently asked questions for answers about therapy, insurance,
               scheduling, and more.
             </p>
-            <a
-              href="/faq"
-              className="inline-block bg-[var(--primary)] text-white px-8 py-3 rounded-lg font-semibold hover:bg-[var(--primary-dark)] transition-colors duration-200"
-            >
-              View FAQ
-            </a>
+            <Button href="/faq">View FAQ</Button>
           </div>
         </div>
       </section>

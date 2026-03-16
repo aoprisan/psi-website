@@ -1,9 +1,11 @@
 'use client';
 
 import { useState } from 'react';
-import { Metadata } from 'next';
+import PageHeader from '@/components/ui/PageHeader';
+import FAQItem from '@/components/ui/FAQItem';
+import Button from '@/components/ui/Button';
 
-interface FAQItem {
+interface FAQ {
   question: string;
   answer: string;
   category: string;
@@ -12,7 +14,7 @@ interface FAQItem {
 export default function FAQ() {
   const [openIndex, setOpenIndex] = useState<number | null>(null);
 
-  const faqs: FAQItem[] = [
+  const faqs: FAQ[] = [
     {
       category: 'Getting Started',
       question: 'How do I schedule my first appointment?',
@@ -107,17 +109,10 @@ export default function FAQ() {
 
   return (
     <div>
-      {/* Page Header */}
-      <section className="bg-[var(--primary)] text-white py-16">
-        <div className="container mx-auto px-6">
-          <h1 className="text-4xl md:text-5xl font-bold text-white">
-            Frequently Asked Questions
-          </h1>
-          <p className="text-xl mt-4 text-white/90">
-            Find answers to common questions about therapy and my practice
-          </p>
-        </div>
-      </section>
+      <PageHeader
+        title="Frequently Asked Questions"
+        subtitle="Find answers to common questions about therapy and my practice"
+      />
 
       {/* FAQ Content */}
       <section className="section-padding bg-white">
@@ -129,43 +124,16 @@ export default function FAQ() {
                 <div className="space-y-4">
                   {faqs
                     .filter((faq) => faq.category === category)
-                    .map((faq, index) => {
+                    .map((faq) => {
                       const globalIndex = faqs.indexOf(faq);
-                      const isOpen = openIndex === globalIndex;
                       return (
-                        <div
+                        <FAQItem
                           key={globalIndex}
-                          className="bg-white border-2 border-[var(--neutral-200)] rounded-xl overflow-hidden hover:border-[var(--primary)]/30 transition-colors"
-                        >
-                          <button
-                            onClick={() => toggleFAQ(globalIndex)}
-                            className="w-full text-left p-6 flex items-center justify-between hover:bg-[var(--neutral-50)] transition-colors"
-                          >
-                            <span className="text-lg font-semibold text-[var(--neutral-800)] pr-4">
-                              {faq.question}
-                            </span>
-                            <svg
-                              className={`w-6 h-6 text-[var(--primary)] flex-shrink-0 transform transition-transform ${
-                                isOpen ? 'rotate-180' : ''
-                              }`}
-                              fill="none"
-                              strokeLinecap="round"
-                              strokeLinejoin="round"
-                              strokeWidth="2"
-                              viewBox="0 0 24 24"
-                              stroke="currentColor"
-                            >
-                              <path d="M19 9l-7 7-7-7" />
-                            </svg>
-                          </button>
-                          {isOpen && (
-                            <div className="px-6 pb-6">
-                              <p className="text-[var(--neutral-700)] leading-relaxed">
-                                {faq.answer}
-                              </p>
-                            </div>
-                          )}
-                        </div>
+                          question={faq.question}
+                          answer={faq.answer}
+                          isOpen={openIndex === globalIndex}
+                          onToggle={() => toggleFAQ(globalIndex)}
+                        />
                       );
                     })}
                 </div>
@@ -181,15 +149,10 @@ export default function FAQ() {
           <div className="max-w-3xl mx-auto text-center">
             <h2 className="text-3xl font-bold mb-4">Still Have Questions?</h2>
             <p className="text-lg text-[var(--neutral-700)] mb-6">
-              If you don't see your question answered here, please don't hesitate to reach out.
-              I'm happy to answer any questions you may have about therapy or my practice.
+              If you don&apos;t see your question answered here, please don&apos;t hesitate to reach out.
+              I&apos;m happy to answer any questions you may have about therapy or my practice.
             </p>
-            <a
-              href="/contact"
-              className="inline-block bg-[var(--primary)] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[var(--primary-dark)] transition-colors duration-200"
-            >
-              Contact Me
-            </a>
+            <Button href="/contact" size="large">Contact Me</Button>
           </div>
         </div>
       </section>
