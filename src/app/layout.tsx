@@ -2,17 +2,18 @@ import type { Metadata } from "next";
 import "./globals.css";
 import Header from "@/components/layout/Header";
 import Footer from "@/components/layout/Footer";
+import { SITE_URL, PRACTICE_NAME, CONTACT_INFO } from "@/lib/config";
 
 export const metadata: Metadata = {
-  title: "Psychology Practice | Professional Therapy & Counseling",
+  title: `${PRACTICE_NAME} | Professional Therapy & Counseling`,
   description: "Professional psychological services offering individual therapy, counseling, and support for mental health and personal growth in a safe, confidential environment.",
   keywords: ["psychology", "therapy", "counseling", "mental health", "psychologist", "psychotherapy"],
   openGraph: {
-    title: "Psychology Practice | Professional Therapy & Counseling",
+    title: `${PRACTICE_NAME} | Professional Therapy & Counseling`,
     description: "Professional psychological services offering individual therapy, counseling, and support for mental health and personal growth.",
     type: "website",
     locale: "en_US",
-    siteName: "Psychology Practice",
+    siteName: PRACTICE_NAME,
   },
 };
 
@@ -24,18 +25,18 @@ export default function RootLayout({
   const jsonLd = {
     "@context": "https://schema.org",
     "@type": "LocalBusiness",
-    "@id": "https://www.psychologypractice.com",
-    name: "Psychology Practice",
+    "@id": SITE_URL,
+    name: PRACTICE_NAME,
     description: "Professional psychological services offering individual therapy, counseling, and support for mental health and personal growth.",
-    url: "https://www.psychologypractice.com",
-    telephone: "+1234567890",
-    email: "contact@psychologypractice.com",
+    url: SITE_URL,
+    telephone: CONTACT_INFO.phoneTel,
+    email: CONTACT_INFO.email,
     address: {
       "@type": "PostalAddress",
-      streetAddress: "123 Main Street, Suite 100",
-      addressLocality: "Your City",
-      addressRegion: "State",
-      postalCode: "12345",
+      streetAddress: CONTACT_INFO.address.street,
+      addressLocality: CONTACT_INFO.address.city,
+      addressRegion: CONTACT_INFO.address.state,
+      postalCode: CONTACT_INFO.address.zip,
     },
     priceRange: "$$",
     openingHours: "Mo-Fr 09:00-18:00",

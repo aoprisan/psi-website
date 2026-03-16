@@ -1,4 +1,3 @@
-import Link from 'next/link';
 import { Metadata } from 'next';
 import PageHeader from '@/components/ui/PageHeader';
 import SectionHeading from '@/components/ui/SectionHeading';
@@ -11,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 export default function Services() {
-  const services = [
+  const services: Array<{ title: string; icon: React.ReactNode; description: string; features: string[]; color: 'primary' | 'secondary' | 'accent' }> = [
     {
       title: 'Individual Therapy',
       icon: (

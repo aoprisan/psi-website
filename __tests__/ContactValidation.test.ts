@@ -1,42 +1,5 @@
 import { describe, it, expect } from 'vitest';
-
-// Inline the validation functions to test them independently
-function validateEmail(email: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-function validatePhone(phone: string): boolean {
-  if (!phone) return true;
-  return /^[\d\s()+-]{7,20}$/.test(phone);
-}
-
-interface FormErrors {
-  name?: string;
-  email?: string;
-  phone?: string;
-  subject?: string;
-  message?: string;
-}
-
-function validateForm(data: { name: string; email: string; phone: string; subject: string; message: string }): FormErrors {
-  const errors: FormErrors = {};
-  if (!data.name.trim()) errors.name = 'Name is required';
-  if (!data.email.trim()) {
-    errors.email = 'Email is required';
-  } else if (!validateEmail(data.email)) {
-    errors.email = 'Please enter a valid email address';
-  }
-  if (data.phone && !validatePhone(data.phone)) {
-    errors.phone = 'Please enter a valid phone number';
-  }
-  if (!data.subject) errors.subject = 'Please select a subject';
-  if (!data.message.trim()) {
-    errors.message = 'Message is required';
-  } else if (data.message.trim().length < 10) {
-    errors.message = 'Message must be at least 10 characters';
-  }
-  return errors;
-}
+import { validateEmail, validatePhone, validateForm } from '@/lib/validation';
 
 describe('Email validation', () => {
   it('accepts valid emails', () => {

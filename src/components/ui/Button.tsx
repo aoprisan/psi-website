@@ -1,9 +1,26 @@
 import Link from 'next/link';
 
+type ButtonVariant = 'primary' | 'secondary' | 'outline';
+type ButtonSize = 'default' | 'large';
+
+const sizeClasses: Record<ButtonSize, string> = {
+  default: 'px-8 py-3',
+  large: 'px-8 py-4',
+};
+
+const variantClasses: Record<ButtonVariant, string> = {
+  primary:
+    'bg-[var(--primary)] text-white hover:bg-[var(--primary-dark)] disabled:opacity-50 disabled:cursor-not-allowed',
+  secondary:
+    'bg-white text-[var(--primary)] hover:bg-[var(--neutral-50)]',
+  outline:
+    'bg-transparent border-2 border-white text-white hover:bg-white/10',
+};
+
 interface ButtonProps {
   href?: string;
-  variant?: 'primary' | 'secondary' | 'outline';
-  size?: 'default' | 'large';
+  variant?: ButtonVariant;
+  size?: ButtonSize;
   className?: string;
   children: React.ReactNode;
   type?: 'button' | 'submit';
@@ -21,21 +38,7 @@ export default function Button({
   disabled,
   onClick,
 }: ButtonProps) {
-  const base = 'inline-block font-semibold rounded-lg transition-colors duration-200 text-center';
-  const sizes = {
-    default: 'px-8 py-3',
-    large: 'px-8 py-4',
-  };
-  const variants = {
-    primary:
-      'bg-[var(--primary)] text-white hover:bg-[var(--primary-dark)] disabled:opacity-50 disabled:cursor-not-allowed',
-    secondary:
-      'bg-white text-[var(--primary)] hover:bg-[var(--neutral-50)]',
-    outline:
-      'bg-transparent border-2 border-white text-white hover:bg-white/10',
-  };
-
-  const classes = `${base} ${sizes[size]} ${variants[variant]} ${className}`;
+  const classes = `inline-block font-semibold rounded-lg transition-colors duration-200 text-center ${sizeClasses[size]} ${variantClasses[variant]} ${className}`;
 
   if (href) {
     return (

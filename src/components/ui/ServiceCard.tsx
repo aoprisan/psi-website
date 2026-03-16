@@ -1,17 +1,25 @@
+export type ServiceColor = 'primary' | 'secondary' | 'accent';
+
+const colorClasses: Record<ServiceColor, { bg: string; text: string }> = {
+  primary: { bg: 'bg-[var(--primary)]/10', text: 'text-[var(--primary)]' },
+  secondary: { bg: 'bg-[var(--secondary)]/10', text: 'text-[var(--secondary)]' },
+  accent: { bg: 'bg-[var(--accent)]/10', text: 'text-[var(--accent)]' },
+};
+
 interface ServiceCardProps {
   title: string;
   description: string;
   icon: React.ReactNode;
   features: string[];
-  color: string;
+  color: ServiceColor;
 }
 
 export default function ServiceCard({ title, description, icon, features, color }: ServiceCardProps) {
+  const { bg, text } = colorClasses[color];
+
   return (
     <div className="bg-white border-2 border-[var(--neutral-200)] rounded-2xl p-8 hover:border-[var(--primary)] transition-all duration-300 hover:shadow-lg">
-      <div
-        className={`w-16 h-16 bg-[var(--${color})]/10 rounded-xl flex items-center justify-center mb-6 text-[var(--${color})]`}
-      >
+      <div className={`w-16 h-16 ${bg} rounded-xl flex items-center justify-center mb-6 ${text}`}>
         {icon}
       </div>
       <h3 className="text-2xl font-bold mb-4">{title}</h3>

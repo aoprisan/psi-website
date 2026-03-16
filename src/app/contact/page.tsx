@@ -3,43 +3,8 @@
 import { useState } from 'react';
 import PageHeader from '@/components/ui/PageHeader';
 import Button from '@/components/ui/Button';
-
-interface FormErrors {
-  name?: string;
-  email?: string;
-  phone?: string;
-  subject?: string;
-  message?: string;
-}
-
-function validateEmail(email: string): boolean {
-  return /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email);
-}
-
-function validatePhone(phone: string): boolean {
-  if (!phone) return true; // optional field
-  return /^[\d\s()+-]{7,20}$/.test(phone);
-}
-
-function validateForm(data: { name: string; email: string; phone: string; subject: string; message: string }): FormErrors {
-  const errors: FormErrors = {};
-  if (!data.name.trim()) errors.name = 'Name is required';
-  if (!data.email.trim()) {
-    errors.email = 'Email is required';
-  } else if (!validateEmail(data.email)) {
-    errors.email = 'Please enter a valid email address';
-  }
-  if (data.phone && !validatePhone(data.phone)) {
-    errors.phone = 'Please enter a valid phone number';
-  }
-  if (!data.subject) errors.subject = 'Please select a subject';
-  if (!data.message.trim()) {
-    errors.message = 'Message is required';
-  } else if (data.message.trim().length < 10) {
-    errors.message = 'Message must be at least 10 characters';
-  }
-  return errors;
-}
+import { CONTACT_INFO } from '@/lib/config';
+import { validateForm, type FormErrors } from '@/lib/validation';
 
 export default function Contact() {
   const [formData, setFormData] = useState({
@@ -56,7 +21,6 @@ export default function Contact() {
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement | HTMLSelectElement>) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error for this field on change
     if (errors[name as keyof FormErrors]) {
       setErrors((prev) => ({ ...prev, [name]: undefined }));
     }
@@ -93,11 +57,6 @@ export default function Contact() {
     }
   };
 
-  const fieldError = (field: keyof FormErrors) =>
-    errors[field] ? (
-      <p className="text-red-600 text-sm mt-1" role="alert">{errors[field]}</p>
-    ) : null;
-
   return (
     <div>
       <PageHeader title="Contact Me" subtitle="Take the first step - I'm here to help" />
@@ -125,8 +84,8 @@ export default function Contact() {
                   </div>
                   <div className="ml-4">
                     <h3 className="font-semibold text-lg mb-1">Email</h3>
-                    <a href="mailto:contact@psychologypractice.com" className="text-[var(--primary)] hover:text-[var(--primary-dark)] transition-colors">
-                      contact@psychologypractice.com
+                    <a href={`mailto:${CONTACT_INFO.email}`} className="text-[var(--primary)] hover:text-[var(--primary-dark)] transition-colors">
+                      {CONTACT_INFO.email}
                     </a>
                   </div>
                 </div>
@@ -139,10 +98,10 @@ export default function Contact() {
                   </div>
                   <div className="ml-4">
                     <h3 className="font-semibold text-lg mb-1">Phone</h3>
-                    <a href="tel:+1234567890" className="text-[var(--primary)] hover:text-[var(--primary-dark)] transition-colors">
-                      +1 (234) 567-890
+                    <a href={`tel:${CONTACT_INFO.phoneTel}`} className="text-[var(--primary)] hover:text-[var(--primary-dark)] transition-colors">
+                      {CONTACT_INFO.phone}
                     </a>
-                    <p className="text-sm text-[var(--neutral-600)] mt-1">Mon-Fri: 9am - 6pm</p>
+                    <p className="text-sm text-[var(--neutral-600)] mt-1">{CONTACT_INFO.hours}</p>
                   </div>
                 </div>
 
@@ -156,8 +115,8 @@ export default function Contact() {
                   <div className="ml-4">
                     <h3 className="font-semibold text-lg mb-1">Office Location</h3>
                     <p className="text-[var(--neutral-700)]">
-                      123 Main Street, Suite 100<br />
-                      Your City, State 12345
+                      {CONTACT_INFO.address.street}<br />
+                      {CONTACT_INFO.address.city}, {CONTACT_INFO.address.state} {CONTACT_INFO.address.zip}
                     </p>
                   </div>
                 </div>
@@ -282,13 +241,9 @@ export default function Contact() {
                   {errors.message && <p id="message-error" className="text-red-600 text-sm mt-1" role="alert">{errors.message}</p>}
                 </div>
 
-                <button
-                  type="submit"
-                  disabled={isSubmitting}
-                  className="w-full bg-[var(--primary)] text-white px-8 py-4 rounded-lg font-semibold hover:bg-[var(--primary-dark)] transition-colors duration-200 disabled:opacity-50 disabled:cursor-not-allowed"
-                >
+                <Button type="submit" disabled={isSubmitting} size="large" className="w-full">
                   {isSubmitting ? 'Sending...' : 'Send Message'}
-                </button>
+                </Button>
 
                 <div aria-live="polite">
                   {submitStatus === 'success' && (
