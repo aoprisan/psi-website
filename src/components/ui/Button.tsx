@@ -1,61 +1,80 @@
-import Link from 'next/link';
+import { Link } from "react-router-dom";
+import type { ComponentPropsWithoutRef, ReactNode } from "react";
 
-type ButtonVariant = 'primary' | 'secondary' | 'outline';
-type ButtonSize = 'default' | 'large';
+type Variant = "primary" | "arrow";
 
-const sizeClasses: Record<ButtonSize, string> = {
-  default: 'px-8 py-3',
-  large: 'px-8 py-4',
-};
+const Arrow = () => (
+  <svg
+    className="arrow"
+    aria-hidden
+    width="14"
+    height="10"
+    viewBox="0 0 14 10"
+    fill="none"
+  >
+    <path
+      d="M1 5h12m0 0L9 1m4 4L9 9"
+      stroke="currentColor"
+      strokeWidth="1.25"
+      strokeLinecap="square"
+    />
+  </svg>
+);
 
-const variantClasses: Record<ButtonVariant, string> = {
-  primary:
-    'bg-[var(--primary)] text-white hover:bg-[var(--primary-dark)] disabled:opacity-50 disabled:cursor-not-allowed',
-  secondary:
-    'bg-white text-[var(--primary)] hover:bg-[var(--neutral-50)]',
-  outline:
-    'bg-transparent border-2 border-white text-white hover:bg-white/10',
-};
-
-interface ButtonProps {
-  href?: string;
-  variant?: ButtonVariant;
-  size?: ButtonSize;
-  className?: string;
-  children: React.ReactNode;
-  type?: 'button' | 'submit';
-  disabled?: boolean;
-  onClick?: () => void;
+function classes(variant: Variant, className?: string) {
+  const base = variant === "primary" ? "btn-primary" : "btn-arrow";
+  return `${base} ${className ?? ""}`.trim();
 }
 
-export default function Button({
-  href,
-  variant = 'primary',
-  size = 'default',
-  className = '',
-  children,
-  type = 'button',
-  disabled,
-  onClick,
-}: ButtonProps) {
-  const classes = `inline-block font-semibold rounded-lg transition-colors duration-200 text-center ${sizeClasses[size]} ${variantClasses[variant]} ${className}`;
+type LinkProps = {
+  to: string;
+  variant?: Variant;
+  children: ReactNode;
+  className?: string;
+} & Omit<ComponentPropsWithoutRef<typeof Link>, "to" | "className" | "children">;
 
-  if (href) {
+type ButtonProps = {
+  to?: undefined;
+  variant?: Variant;
+  children: ReactNode;
+  className?: string;
+} & Omit<ComponentPropsWithoutRef<"button">, "className" | "children">;
+
+export function Button(props: LinkProps | ButtonProps) {
+  if ("to" in props && props.to !== undefined) {
+    const { to, variant = "arrow", children, className, ...rest } = props;
     return (
-      <Link href={href} className={classes}>
-        {children}
+      <Link to={to} className={classes(variant, className)} {...rest}>
+        {variant === "arrow" ? (
+          <>
+            <span>{children}</span>
+            <Arrow />
+            <span className="line" aria-hidden />
+          </>
+        ) : (
+          <>
+            <span>{children}</span>
+            <Arrow />
+          </>
+        )}
       </Link>
     );
   }
-
+  const { variant = "arrow", children, className, ...rest } = props;
   return (
-    <button
-      type={type}
-      disabled={disabled}
-      onClick={onClick}
-      className={classes}
-    >
-      {children}
+    <button className={classes(variant, className)} {...rest}>
+      {variant === "arrow" ? (
+        <>
+          <span>{children}</span>
+          <Arrow />
+          <span className="line" aria-hidden />
+        </>
+      ) : (
+        <>
+          <span>{children}</span>
+          <Arrow />
+        </>
+      )}
     </button>
   );
 }

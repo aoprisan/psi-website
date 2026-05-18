@@ -1,0 +1,7 @@
+<?xml version='1.0' encoding='utf-8'?>
+<resources>
+    <string name="app_name">PSI</string>
+    <string name="title_activity_main">PSI</string>
+    <string name="package_name">com.example.psi.website</string>
+    <string name="custom_url_scheme">com.example.psi.website</string>
+</resources>

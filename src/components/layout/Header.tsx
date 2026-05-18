@@ -1,100 +1,173 @@
-'use client';
+import { useEffect, useState } from "react";
+import { Link, NavLink, useLocation } from "react-router-dom";
+import { nav, site } from "@/lib/site";
 
-import Link from 'next/link';
-import { useState } from 'react';
+export function Header() {
+  const [open, setOpen] = useState(false);
+  const [scrolled, setScrolled] = useState(false);
+  const location = useLocation();
 
-const Header = () => {
-  const [isMenuOpen, setIsMenuOpen] = useState(false);
+  useEffect(() => setOpen(false), [location.pathname]);
 
-  const navigation = [
-    { name: 'Home', href: '/' },
-    { name: 'About', href: '/about' },
-    { name: 'Services', href: '/services' },
-    { name: 'FAQ', href: '/faq' },
-    { name: 'Contact', href: '/contact' },
-  ];
+  useEffect(() => {
+    const onScroll = () => setScrolled(window.scrollY > 12);
+    onScroll();
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
+
+  useEffect(() => {
+    document.documentElement.style.overflow = open ? "hidden" : "";
+    return () => {
+      document.documentElement.style.overflow = "";
+    };
+  }, [open]);
 
   return (
-    <header className="bg-white shadow-sm sticky top-0 z-50">
-      <nav className="container mx-auto px-6 py-4">
-        <div className="flex items-center justify-between">
-          {/* Logo/Brand */}
-          <Link href="/" className="flex items-center space-x-2">
-            <div className="text-2xl font-semibold text-[var(--primary)]">
-              Psychology Practice
-            </div>
-          </Link>
+    <header
+      className={`sticky top-0 z-40 transition-[background,border-color,backdrop-filter] duration-300 ${
+        scrolled
+          ? "bg-[color:var(--color-paper)]/82 backdrop-blur-md border-b border-[color:var(--color-rule-soft)]"
+          : "bg-transparent border-b border-transparent"
+      }`}
+    >
+      <div className="mx-auto flex max-w-[var(--shell-max)] items-center justify-between px-6 md:px-10 py-5 md:py-6">
+        <Link
+          to="/"
+          className="flex flex-col leading-none"
+          onClick={() => setOpen(false)}
+        >
+          <span
+            className="font-display"
+            style={{ fontSize: "1.35rem", letterSpacing: "-0.01em", fontWeight: 500 }}
+          >
+            {site.practitionerName}
+          </span>
+          <span
+            className="eyebrow mt-1"
+            style={{ fontSize: "9.5px", letterSpacing: "0.22em" }}
+          >
+            {site.credentialsShort}
+          </span>
+        </Link>
 
-          {/* Desktop Navigation */}
-          <div className="hidden md:flex items-center gap-8">
-            {navigation.map((item) => (
-              <Link
-                key={item.name}
-                href={item.href}
-                className="text-[var(--neutral-700)] hover:text-[var(--primary)] transition-colors duration-200 font-medium whitespace-nowrap"
+        <nav
+          className="hidden md:flex items-center gap-9"
+          aria-label="Primary"
+        >
+          {nav
+            .filter((n) => n.to !== "/")
+            .map((item) => (
+              <NavLink
+                key={item.to}
+                to={item.to}
+                className={({ isActive }) =>
+                  `text-[13px] tracking-wide transition-colors ${
+                    isActive
+                      ? "text-[color:var(--color-accent)]"
+                      : "text-[color:var(--color-ink)] hover:text-[color:var(--color-accent)]"
+                  }`
+                }
               >
-                {item.name}
-              </Link>
+                <span className="under-link">{item.label}</span>
+              </NavLink>
             ))}
-            <Link
-              href="/contact"
-              className="bg-[var(--primary)] text-white px-6 py-2 rounded-lg hover:bg-[var(--primary-dark)] transition-colors duration-200 whitespace-nowrap"
+          <Link
+            to="/contact"
+            className="btn-primary"
+            style={{ padding: "0.7rem 1.1rem", fontSize: "13px" }}
+          >
+            <span>Consultation</span>
+            <svg
+              width="12"
+              height="9"
+              viewBox="0 0 14 10"
+              fill="none"
+              aria-hidden
             >
-              Book Appointment
+              <path
+                d="M1 5h12m0 0L9 1m4 4L9 9"
+                stroke="currentColor"
+                strokeWidth="1.25"
+                strokeLinecap="square"
+              />
+            </svg>
+          </Link>
+        </nav>
+
+        <button
+          className="md:hidden inline-flex items-center gap-2 text-[color:var(--color-ink)]"
+          aria-label={open ? "Close menu" : "Open menu"}
+          aria-expanded={open}
+          aria-controls="mobile-nav"
+          onClick={() => setOpen((v) => !v)}
+        >
+          <span className="eyebrow">{open ? "Close" : "Menu"}</span>
+          <span
+            aria-hidden
+            className="inline-block w-7 h-[1px] bg-current"
+            style={{
+              boxShadow: open
+                ? "0 0 0 transparent"
+                : "0 -5px 0 currentColor, 0 5px 0 currentColor",
+              transform: open ? "rotate(45deg)" : "none",
+              transition: "box-shadow 200ms, transform 200ms",
+            }}
+          />
+        </button>
+      </div>
+
+      {open && (
+        <nav
+          id="mobile-nav"
+          className="md:hidden fixed inset-x-0 top-[72px] bottom-0 bg-[color:var(--color-paper)] z-30"
+          aria-label="Primary mobile"
+        >
+          <ul className="flex flex-col px-6 pt-8 pb-12 gap-1">
+            {nav.map((item, i) => (
+              <li
+                key={item.to}
+                className="border-b border-[color:var(--color-rule-soft)]"
+              >
+                <NavLink
+                  to={item.to}
+                  end={item.to === "/"}
+                  className={({ isActive }) =>
+                    `flex items-baseline justify-between py-5 ${
+                      isActive
+                        ? "text-[color:var(--color-accent)]"
+                        : "text-[color:var(--color-ink)]"
+                    }`
+                  }
+                >
+                  <span
+                    className="font-display"
+                    style={{ fontSize: "2rem", fontWeight: 400 }}
+                  >
+                    {item.label}
+                  </span>
+                  <span className="eyebrow" style={{ fontSize: "10px" }}>
+                    0{i + 1}
+                  </span>
+                </NavLink>
+              </li>
+            ))}
+          </ul>
+          <div className="px-6 mt-6">
+            <Link to="/contact" className="btn-primary">
+              <span>Book consultation</span>
+              <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden>
+                <path
+                  d="M1 5h12m0 0L9 1m4 4L9 9"
+                  stroke="currentColor"
+                  strokeWidth="1.25"
+                  strokeLinecap="square"
+                />
+              </svg>
             </Link>
           </div>
-
-          {/* Mobile Menu Button */}
-          <button
-            className="md:hidden p-2 rounded-lg hover:bg-[var(--neutral-100)] transition-colors"
-            onClick={() => setIsMenuOpen(!isMenuOpen)}
-            aria-label="Toggle menu"
-          >
-            <svg
-              className="w-6 h-6"
-              fill="none"
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              strokeWidth="2"
-              viewBox="0 0 24 24"
-              stroke="currentColor"
-            >
-              {isMenuOpen ? (
-                <path d="M6 18L18 6M6 6l12 12" />
-              ) : (
-                <path d="M4 6h16M4 12h16M4 18h16" />
-              )}
-            </svg>
-          </button>
-        </div>
-
-        {/* Mobile Navigation */}
-        {isMenuOpen && (
-          <div className="md:hidden mt-4 pb-4 border-t border-[var(--neutral-200)] pt-4">
-            <div className="flex flex-col gap-3">
-              {navigation.map((item) => (
-                <Link
-                  key={item.name}
-                  href={item.href}
-                  className="text-[var(--neutral-700)] hover:text-[var(--primary)] transition-colors duration-200 font-medium py-2"
-                  onClick={() => setIsMenuOpen(false)}
-                >
-                  {item.name}
-                </Link>
-              ))}
-              <Link
-                href="/contact"
-                className="bg-[var(--primary)] text-white px-6 py-2 rounded-lg hover:bg-[var(--primary-dark)] transition-colors duration-200 text-center"
-                onClick={() => setIsMenuOpen(false)}
-              >
-                Book Appointment
-              </Link>
-            </div>
-          </div>
-        )}
-      </nav>
+        </nav>
+      )}
     </header>
   );
-};
-
-export default Header;
+}
