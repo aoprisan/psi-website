@@ -30,6 +30,7 @@ export const nav = [
   { to: "/despre", label: "Despre mine" },
   { to: "/servicii", label: "Servicii & tarife" },
   { to: "/cum-lucrez", label: "Cum lucrez" },
+  { to: "/spatiul-tau", label: "Spațiul tău" },
   { to: "/intrebari-frecvente", label: "Întrebări frecvente" },
   { to: "/contact", label: "Contact" },
 ] as const;
