@@ -34,6 +34,10 @@ const sections = [
     title: "7. Securitatea datelor",
     body: "[Măsurile de securitate aplicate — ex. comunicare criptată, arhivare securizată a dosarelor, acces restricționat — de completat.]",
   },
+  {
+    title: "8. „Spațiul tău” — jurnalul și chestionarele de pe site",
+    body: "Secțiunea „Spațiul tău” (jurnal, chestionare de screening, exerciții de reglare) funcționează integral în browserul tău. Notările, răspunsurile la chestionare și rezultatele lor sunt salvate exclusiv în memoria locală a dispozitivului tău și nu sunt transmise către niciun server — nici al meu, nici al unui terț. Nu există cont, nu există sincronizare și nu am acces tehnic la aceste date. Dacă alegi un cod de acces, conținutul este criptat local cu AES-256-GCM, cu o cheie derivată din codul tău prin PBKDF2-SHA256 (310.000 de iterații); codul nu este stocat nicăieri și nu poate fi recuperat. Ștergerea datelor din browser sau folosirea butonului „Șterge tot” din setările secțiunii elimină definitiv aceste informații. Întrucât datele nu părăsesc dispozitivul tău, nu acționez ca operator în raport cu ele.",
+  },
 ];
 
 export function Privacy() {

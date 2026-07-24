@@ -140,6 +140,67 @@ export function Home() {
         </div>
       </Section>
 
+      {/* ---------- Private space ---------- */}
+      <Section tone="dark" className="rounded-[2.5rem] mx-2 md:mx-4">
+        <div className="grid items-center gap-12 lg:grid-cols-[1.05fr_0.95fr]">
+          <Reveal>
+            <p className="eyebrow" style={{ color: "var(--color-clay-tint)" }}>
+              Între ședințe
+            </p>
+            <h2 className="mt-3 text-[clamp(1.9rem,1.4rem+2vw,2.9rem)] text-[color:var(--color-cream)]">
+              Terapia se întâmplă o oră pe săptămână. <em className="italic text-[color:var(--color-clay-tint)]">Restul</em>{" "}
+              se întâmplă acasă.
+            </h2>
+            <p
+              className="mt-6 text-[16.5px] leading-relaxed text-[color:var(--color-surface-deep)]"
+              style={{ maxWidth: "var(--measure)" }}
+            >
+              „Spațiul tău” este o secțiune cu instrumente pe care le poți
+              folosi oricând ai nevoie: respirație ghidată pentru momentele de
+              panică, ancorare pentru când mintea pleacă, chestionare de
+              screening validate clinic și un jurnal care îți arată ce se
+              schimbă în timp.
+            </p>
+            <p
+              className="mt-4 text-[15px] leading-relaxed text-[color:var(--color-surface-deep)] opacity-80"
+              style={{ maxWidth: "var(--measure)" }}
+            >
+              Totul rulează pe dispozitivul tău, criptat cu un cod pe care
+              doar tu îl știi. Fără cont, fără server, fără statistici — nici
+              măcar eu nu pot vedea ce notezi acolo.
+            </p>
+            <div className="mt-8 flex flex-wrap gap-4">
+              <Button to="/spatiul-tau" variant="primary-light">
+                Intră în spațiul tău
+              </Button>
+            </div>
+          </Reveal>
+
+          <Reveal delay={120}>
+            <ul className="grid gap-3 sm:grid-cols-2">
+              {[
+                ["Respirație ghidată", "Cinci ritmuri, cu ghidaj vizual și sonor"],
+                ["Ancorare 5-4-3-2-1", "Când prezentul se face nevăzut"],
+                ["Chestionare", "GAD-7, PHQ-9, PC-PTSD-5, WHO-5"],
+                ["Jurnal & tipare", "Ce te ajută, negru pe alb"],
+              ].map(([title, text]) => (
+                <li
+                  key={title}
+                  className="rounded-2xl border border-white/10 bg-white/5 p-5"
+                >
+                  <p className="font-[family-name:var(--font-display)] text-[1.05rem] text-[color:var(--color-cream)]">
+                    {title}
+                  </p>
+                  <p className="mt-1.5 text-[13.5px] leading-relaxed text-[color:var(--color-surface-deep)] opacity-80">
+                    {text}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </div>
+      </Section>
+
       {/* ---------- Process ---------- */}
       <Section tone="surface" className="rounded-[2.5rem] mx-2 md:mx-4">
         <SectionHeading

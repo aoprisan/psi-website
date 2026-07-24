@@ -307,7 +307,325 @@ details.faq > .a {
 .field .error { border-color: #b3543f; }
 .field .error-msg { color: #9c4632; font-size: 13px; margin-top: 0.35rem; }
 
+/* =================================================================
+   Private space ("Spațiul tău")
+   ================================================================= */
+
+/* ---------- top strip & tabs ---------- */
+.space-tab {
+  display: inline-block;
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--color-body);
+  white-space: nowrap;
+  transition: background 180ms ease, color 180ms ease;
+}
+.space-tab:hover { background: var(--color-surface); color: var(--color-ink); }
+.space-tab.is-active {
+  background: var(--color-pine);
+  color: var(--color-cream);
+}
+
+.quick-exit {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
+  font-size: 12.5px;
+  font-weight: 600;
+  padding: 0.35rem 0.8rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--color-clay);
+  color: var(--color-clay-deep);
+  background: var(--color-cream);
+  transition: background 160ms ease, color 160ms ease;
+}
+.quick-exit:hover { background: var(--color-clay-deep); color: var(--color-cream); border-color: var(--color-clay-deep); }
+
+/* ---------- choice controls ---------- */
+.choice-scale { border: 0; padding: 0; margin: 0; }
+.choice-scale__legend { padding: 0; width: 100%; }
+.choice-scale__stack { display: grid; gap: 0.55rem; margin-top: 1.5rem; }
+.choice-scale__row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 1.5rem; }
+
+.choice { display: block; cursor: pointer; }
+.choice__body {
+  display: block;
+  padding: 0.85rem 1.1rem;
+  border: 1.5px solid var(--color-line);
+  border-radius: 14px;
+  background: var(--color-cream);
+  font-size: 15px;
+  line-height: 1.45;
+  color: var(--color-ink);
+  transition: border-color 160ms ease, background 160ms ease, transform 160ms ease;
+}
+.choice:hover .choice__body { border-color: var(--color-sage); }
+.choice input:checked + .choice__body {
+  border-color: var(--color-pine);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--color-pine);
+}
+.choice input:focus-visible + .choice__body {
+  outline: 2px solid var(--color-clay);
+  outline-offset: 2px;
+}
+
+/* ---------- chips (durations, tags, ranges) ---------- */
+.chip {
+  padding: 0.45rem 0.95rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--color-line);
+  background: var(--color-cream);
+  font-size: 14px;
+  font-weight: 500;
+  color: var(--color-body);
+  transition: border-color 160ms ease, background 160ms ease, color 160ms ease;
+}
+.chip:hover { border-color: var(--color-sage); }
+.chip.is-selected {
+  background: var(--color-pine);
+  border-color: var(--color-pine);
+  color: var(--color-cream);
+}
+
+/* ---------- daily check-in dial ---------- */
+.dial-option { display: block; cursor: pointer; }
+.dial-option__body {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.35rem;
+  padding: 0.6rem 0.2rem;
+  border-radius: 12px;
+  border: 1.5px solid var(--color-line);
+  background: var(--color-cream);
+  transition: border-color 160ms ease, background 160ms ease;
+}
+.dial-option__dot {
+  width: 0.6rem;
+  height: 0.6rem;
+  border-radius: 999px;
+  background: var(--color-line);
+  transition: background 160ms ease, transform 160ms ease;
+}
+.dial-option__caption {
+  font-size: 11px;
+  line-height: 1.25;
+  text-align: center;
+  color: var(--color-muted);
+}
+.dial-option:hover .dial-option__body { border-color: var(--color-sage); }
+.dial-option input:checked + .dial-option__body {
+  border-color: var(--color-pine);
+  background: var(--color-surface);
+}
+.dial-option input:checked + .dial-option__body .dial-option__dot {
+  background: var(--color-clay);
+  transform: scale(1.35);
+}
+.dial-option input:checked + .dial-option__body .dial-option__caption {
+  color: var(--color-ink);
+  font-weight: 600;
+}
+.dial-option input:focus-visible + .dial-option__body {
+  outline: 2px solid var(--color-clay);
+  outline-offset: 2px;
+}
+
+/* ---------- distress slider ---------- */
+.sud-slider {
+  appearance: none;
+  height: 6px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, var(--color-sage), var(--color-clay));
+  outline: none;
+}
+.sud-slider::-webkit-slider-thumb {
+  appearance: none;
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--color-cream);
+  border: 2px solid var(--color-pine);
+  cursor: pointer;
+  box-shadow: 0 2px 8px -2px rgba(44, 58, 49, 0.4);
+}
+.sud-slider::-moz-range-thumb {
+  width: 26px;
+  height: 26px;
+  border-radius: 999px;
+  background: var(--color-cream);
+  border: 2px solid var(--color-pine);
+  cursor: pointer;
+}
+
+/* ---------- vault setup options ---------- */
+.vault-option {
+  display: block;
+  padding: 1.2rem 1.3rem;
+  border: 1.5px solid var(--color-line);
+  border-radius: 16px;
+  background: var(--color-cream);
+  cursor: pointer;
+  transition: border-color 160ms ease, background 160ms ease;
+}
+.vault-option:hover { border-color: var(--color-sage); }
+.vault-option.is-selected {
+  border-color: var(--color-pine);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--color-pine);
+}
+.vault-option:has(input:focus-visible) {
+  outline: 2px solid var(--color-clay);
+  outline-offset: 2px;
+}
+.vault-option__title {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.15rem;
+  color: var(--color-ink);
+}
+.vault-option__tag {
+  display: inline-block;
+  margin-left: 0.5rem;
+  vertical-align: middle;
+  font-family: var(--font-sans);
+  font-size: 10.5px;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--color-cream);
+  background: var(--color-sage);
+  border-radius: 999px;
+  padding: 0.15rem 0.5rem;
+}
+.vault-option__text {
+  display: block;
+  margin-top: 0.5rem;
+  font-size: 14.5px;
+  line-height: 1.6;
+  color: var(--color-body);
+}
+
+/* ---------- breathing pacer ---------- */
+.breath-disc {
+  transform-origin: 140px 140px;
+  fill: url(#none);
+  fill: var(--color-surface-deep);
+  opacity: 0.85;
+  /* rAF drives the transform; a short transition only smooths dropped
+     frames without lagging behind the guide. */
+  transition: transform 80ms linear;
+}
+
+/* ---------- breathing pattern picker ---------- */
+.pattern-option {
+  display: block;
+  width: 100%;
+  text-align: left;
+  padding: 0.85rem 1.1rem;
+  border: 1.5px solid var(--color-line);
+  border-radius: 14px;
+  background: var(--color-cream);
+  transition: border-color 160ms ease, background 160ms ease;
+}
+.pattern-option:hover { border-color: var(--color-sage); }
+.pattern-option.is-selected {
+  border-color: var(--color-pine);
+  background: var(--color-surface);
+  box-shadow: inset 0 0 0 1px var(--color-pine);
+}
+.pattern-option__name {
+  display: block;
+  font-family: var(--font-display);
+  font-size: 1.08rem;
+  color: var(--color-ink);
+}
+.pattern-option__purpose {
+  display: block;
+  margin-top: 0.15rem;
+  font-size: 13.5px;
+  line-height: 1.5;
+  color: var(--color-muted);
+}
+
+/* ---------- result bands ---------- */
+.band {
+  display: inline-block;
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  padding: 0.25rem 0.7rem;
+  border-radius: 999px;
+}
+.band--calm { background: var(--color-surface-deep); color: var(--color-pine); }
+.band--watch { background: #f2e7d3; color: #7d5c22; }
+.band--act { background: var(--color-clay-tint); color: var(--color-clay-deep); }
+
+.band-bar { display: block; height: 100%; opacity: 0.35; }
+.band-bar--calm { background: var(--color-sage); }
+.band-bar--watch { background: #d9a648; }
+.band-bar--act { background: var(--color-clay); }
+.band-bar.is-current { opacity: 1; }
+
+.outcome { border-left: 4px solid var(--color-line); }
+.outcome--calm, .outcome--window { border-left-color: var(--color-sage); }
+.outcome--watch, .outcome--hypo { border-left-color: #d9a648; }
+.outcome--act, .outcome--hyper { border-left-color: var(--color-clay); }
+
+/* ---------- safety notice ---------- */
+.safety {
+  border: 2px solid var(--color-clay);
+  background: linear-gradient(180deg, var(--color-clay-tint) 0%, var(--color-cream) 40%);
+}
+.safety__line {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.4rem 0.9rem;
+  font-size: 15px;
+  line-height: 1.55;
+}
+.safety__number {
+  font-family: var(--font-display);
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--color-clay-deep);
+  text-decoration: underline;
+  text-underline-offset: 4px;
+  min-width: 6.5rem;
+}
+
+/* ---------- session prep sheet ---------- */
+.prep-sheet__heading {
+  font-family: var(--font-sans);
+  font-size: 12.5px;
+  font-weight: 700;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-clay);
+}
+
 /* ---------- print ---------- */
 @media print {
   .reveal { opacity: 1; transform: none; }
+
+  /* The session-prep sheet is the only thing worth ink. */
+  .no-print,
+  header,
+  footer,
+  .space-area > nav,
+  .space-area > div:first-child { display: none !important; }
+
+  .prep-sheet {
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    background: #fff !important;
+  }
+  body { background: #fff; font-size: 11pt; }
+  a[href^="tel:"]::after { content: ""; }
 }
