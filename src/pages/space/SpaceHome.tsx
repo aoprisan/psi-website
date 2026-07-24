@@ -120,7 +120,9 @@ export function SpaceHome() {
         <p className="mt-8 text-[14px] leading-relaxed text-[color:var(--color-muted)]" style={{ maxWidth: "var(--measure)" }}>
           Un singur lucru pe care nu îl pot rezolva din cod: dacă altcineva îți
           folosește dispozitivul deblocat. Pentru asta există codul de acces,
-          blocarea automată și butonul de ieșire rapidă din colțul paginii.
+          blocarea automată și butonul de ieșire rapidă din colțul paginii —
+          care închide pagina imediat, dar nu poate șterge istoricul
+          browserului tău.
         </p>
       </section>
 

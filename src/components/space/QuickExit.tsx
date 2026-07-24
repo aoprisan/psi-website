@@ -5,10 +5,13 @@ import { useSpace } from "@/lib/space/SpaceContext";
  * Rapid exit.
  *
  * A standard safety affordance on sites used by people whose device may be
- * watched. It locks the vault, replaces the current history entry so the
- * back button does not return here, and leaves for a neutral page.
+ * watched. It locks the vault and leaves for a neutral page.
  *
- * `location.replace` matters: `assign` would leave this URL one press away.
+ * `location.replace` matters: `assign` would leave this URL one back-press
+ * away. It only drops the *current* entry, though — earlier routes stay in
+ * history, and nothing here can clear the browser's own history or address
+ * bar. It buys the seconds it takes to hand a phone over, not deniability,
+ * and the surrounding copy should not claim more.
  */
 
 const NEUTRAL_DESTINATION = "https://www.google.com/search?q=vremea";
@@ -20,13 +23,17 @@ export function useQuickExit() {
 
   return useCallback(() => {
     lock();
-    try {
-      // Best-effort scrub of the hash route so the URL bar shows nothing
-      // specific even in the instant before the navigation commits.
-      window.location.hash = "";
-    } catch {
-      /* Ignore — the navigation below is what matters. */
+
+    // In the packaged app there is nowhere to navigate *away* to — the web
+    // view is the app. Closing it is the equivalent gesture, where the OS
+    // allows it (Android does, iOS does not).
+    if ("Capacitor" in window) {
+      void import("@capacitor/app")
+        .then(({ App }) => App.exitApp())
+        .catch(() => window.location.replace(NEUTRAL_DESTINATION));
+      return;
     }
+
     window.location.replace(NEUTRAL_DESTINATION);
   }, [lock]);
 }
