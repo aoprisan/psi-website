@@ -1,368 +1,313 @@
+/* Self-hosted fonts (GDPR-friendly: no requests to Google, works offline). */
+@import "@fontsource-variable/fraunces/index.css";
+@import "@fontsource-variable/fraunces/wght-italic.css";
+@import "@fontsource-variable/figtree/index.css";
+@import "@fontsource-variable/figtree/wght-italic.css";
 @import "tailwindcss";
 
 @theme {
-  /* Palette — warm parchment cream + deep warm ink + a single terracotta accent. */
-  --color-paper: #f3eadc;
-  --color-paper-deep: #ebe0cc;
-  --color-paper-darker: #d8c9ad;
-  --color-ink: #1a1916;
-  --color-ink-mid: #4a4843;
-  --color-ink-soft: #797569;
-  --color-ink-faint: #a59f8f;
-  --color-rule: #ccc0a6;
-  --color-rule-soft: #ddd3bd;
-  --color-accent: #b65a35;
-  --color-accent-deep: #94431f;
-  --color-accent-tint: #e7c8b4;
+  /*
+   * Palette — calm, grounded, safe. Warm alabaster ground, sage-tinted
+   * surfaces, deep pine for headings and the footer, a single warm clay
+   * accent used sparingly for actions.
+   */
+  --color-ground: #f7f4ee;
+  --color-surface: #eef0e7;
+  --color-surface-deep: #e2e6d9;
+  --color-pine: #2c3a31;
+  --color-pine-deep: #222e26;
+  --color-ink: #253028;
+  --color-body: #4b5850;
+  --color-muted: #75806f;
+  --color-line: #d8dccb;
+  --color-line-soft: #e5e7da;
+  --color-clay: #b06f4f;
+  --color-clay-deep: #96593c;
+  --color-clay-tint: #f0e2d8;
+  --color-sage: #8a9b85;
+  --color-cream: #fdfcf9;
 
   /* Type. */
-  --font-display: "Cormorant Garamond", "Cormorant", "Times New Roman", ui-serif, Georgia, serif;
-  --font-sans: "DM Sans", ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
-  --font-mono: "IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
+  --font-display: "Fraunces Variable", "Georgia", ui-serif, serif;
+  --font-sans: "Figtree Variable", ui-sans-serif, system-ui, -apple-system, sans-serif;
 
   /* Rhythm. */
-  --shell-max: 76rem;
-  --measure: 38rem;
+  --shell-max: 74rem;
+  --measure: 40rem;
 }
 
 /* ---------- base ---------- */
-html {
-  scroll-behavior: smooth;
+/* Layered so Tailwind utility classes can override element defaults. */
+@layer base {
+  html {
+    scroll-behavior: smooth;
+  }
+
+  body {
+    background: var(--color-ground);
+    color: var(--color-body);
+    font-family: var(--font-sans);
+    font-size: 16.5px;
+    line-height: 1.65;
+    -webkit-font-smoothing: antialiased;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1, h2, h3, h4 {
+    font-family: var(--font-display);
+    font-weight: 500;
+    color: var(--color-ink);
+    line-height: 1.12;
+    letter-spacing: -0.01em;
+    font-variation-settings: "SOFT" 60, "WONK" 0;
+  }
+
+  ::selection {
+    background: var(--color-pine);
+    color: var(--color-cream);
+  }
 }
 
-body {
-  background: var(--color-paper);
-  color: var(--color-ink-mid);
-  font-family: var(--font-sans);
-  font-weight: 400;
-  font-size: 17px;
-  line-height: 1.55;
-  -webkit-font-smoothing: antialiased;
-  text-rendering: optimizeLegibility;
-  font-feature-settings: "ss01", "ss02", "kern", "liga";
-  letter-spacing: -0.005em;
-  overflow-x: hidden;
-}
-
-/* Subtle paper-grain texture. SVG noise inlined to avoid an extra request. */
-body::before {
-  content: "";
-  position: fixed;
-  inset: 0;
-  pointer-events: none;
-  z-index: 1;
-  opacity: 0.35;
-  mix-blend-mode: multiply;
-  background-image: url("data:image/svg+xml;utf8,<svg xmlns='http://www.w3.org/2000/svg' width='160' height='160'><filter id='n'><feTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='2' stitchTiles='stitch'/><feColorMatrix values='0 0 0 0 0.10  0 0 0 0 0.10  0 0 0 0 0.08  0 0 0 0.16 0'/></filter><rect width='100%25' height='100%25' filter='url(%23n)'/></svg>");
-}
-
-#root {
-  position: relative;
-  z-index: 2;
-}
-
-h1, h2, h3, h4, h5 {
-  font-family: var(--font-display);
-  color: var(--color-ink);
-  font-weight: 400;
-  letter-spacing: -0.015em;
-  line-height: 1.05;
-}
-
-p { color: var(--color-ink-mid); }
-
-::selection {
-  background: var(--color-accent);
-  color: var(--color-paper);
-}
-
-/* ---------- focus ring ---------- */
+/* ---------- focus ---------- */
 a:focus-visible,
 button:focus-visible,
-[role="button"]:focus-visible,
 input:focus-visible,
 textarea:focus-visible,
 summary:focus-visible {
-  outline: 1.5px solid var(--color-accent);
+  outline: 2px solid var(--color-clay);
   outline-offset: 3px;
-  border-radius: 2px;
+  border-radius: 4px;
 }
 
 .skip-link {
   position: absolute;
   left: -9999px;
   top: 0.5rem;
-  background: var(--color-ink);
-  color: var(--color-paper);
-  padding: 0.5rem 0.75rem;
-  border-radius: 2px;
+  background: var(--color-pine);
+  color: var(--color-cream);
+  padding: 0.5rem 0.9rem;
+  border-radius: 999px;
   z-index: 100;
-  font-family: var(--font-mono);
-  font-size: 12px;
+  font-size: 13px;
 }
 .skip-link:focus { left: 0.5rem; }
 
-/* ---------- editorial utilities ---------- */
+/* ---------- utilities ---------- */
 .eyebrow {
-  font-family: var(--font-mono);
-  font-weight: 400;
-  font-size: 11px;
-  letter-spacing: 0.18em;
+  font-family: var(--font-sans);
+  font-weight: 600;
+  font-size: 12.5px;
+  letter-spacing: 0.16em;
   text-transform: uppercase;
-  color: var(--color-ink-soft);
+  color: var(--color-clay);
 }
 
-.eyebrow-accent { color: var(--color-accent); }
-
-.rule {
-  height: 1px;
-  background: var(--color-rule);
-}
-
-.rule-soft {
-  height: 1px;
-  background: var(--color-rule-soft);
-}
-
-/* Numbered section index — a small mono label paired with a hairline rule. */
-.section-index {
-  display: grid;
-  grid-template-columns: auto 1fr;
-  gap: 1.25rem;
-  align-items: center;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--color-ink-soft);
-}
-.section-index::after {
-  content: "";
-  height: 1px;
-  background: var(--color-rule);
-}
-
-/* Display-scale headline used for hero / pull-quote moments. */
 .display {
   font-family: var(--font-display);
-  font-weight: 300;
-  line-height: 0.98;
-  letter-spacing: -0.025em;
+  font-weight: 480;
+  line-height: 1.06;
+  letter-spacing: -0.015em;
   color: var(--color-ink);
+  font-variation-settings: "SOFT" 80, "WONK" 0;
 }
 .display em {
   font-style: italic;
-  color: var(--color-accent);
-  font-weight: 300;
+  font-weight: 420;
+  color: var(--color-clay);
 }
 
-/* Linked text with a hairline underline that animates. */
-.under-link {
-  position: relative;
-  color: var(--color-ink);
-  white-space: nowrap;
-}
-.under-link::after {
-  content: "";
-  position: absolute;
-  left: 0;
-  right: 0;
-  bottom: -3px;
-  height: 1px;
-  background: currentColor;
-  transform-origin: left;
-  transition: transform 320ms cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.under-link:hover::after { transform: scaleX(0); transform-origin: right; }
-
-/* Inline link inside body copy. */
-.inline-link {
-  color: var(--color-accent);
-  text-decoration: underline;
-  text-decoration-thickness: 1px;
-  text-underline-offset: 3px;
-  text-decoration-color: rgba(182, 90, 53, 0.4);
-  transition: text-decoration-color 200ms;
-}
-.inline-link:hover { text-decoration-color: var(--color-accent); }
-
-/* ---------- portrait placeholder treatment ---------- */
-.portrait {
-  position: relative;
-  background:
-    linear-gradient(135deg, rgba(180, 90, 53, 0.10) 0%, rgba(26, 25, 22, 0.04) 40%, rgba(216, 201, 173, 0.30) 100%),
-    repeating-linear-gradient(45deg, rgba(26, 25, 22, 0.045) 0 1px, transparent 1px 6px),
-    var(--color-paper-deep);
-  border: 1px solid var(--color-rule);
-  overflow: hidden;
-}
-.portrait::after {
-  content: "Portrait";
-  position: absolute;
-  bottom: 1rem;
-  left: 1rem;
-  font-family: var(--font-mono);
-  font-size: 10px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--color-ink-soft);
-  background: var(--color-paper);
-  padding: 0.25rem 0.55rem;
-  border: 1px solid var(--color-rule);
+/*
+ * Placeholder marker — wraps text awaiting real content so it is
+ * unmistakable during review, without breaking the layout.
+ */
+.ph {
+  background: var(--color-clay-tint);
+  border-bottom: 1px dashed var(--color-clay);
+  border-radius: 3px;
+  padding: 0 0.25em;
+  color: var(--color-clay-deep);
+  font-style: normal;
 }
 
-/* ---------- arrow button ---------- */
-.btn-arrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.65rem;
-  font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 500;
-  color: var(--color-ink);
-  padding: 0.4rem 0;
-  letter-spacing: 0.005em;
-  position: relative;
-  transition: color 220ms;
-}
-.btn-arrow .line {
-  position: absolute;
-  left: 0; right: 0; bottom: -1px;
-  height: 1px;
-  background: var(--color-ink);
-  transform-origin: left;
-  transition: transform 420ms cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.btn-arrow:hover .line { transform: scaleX(1.06); }
-.btn-arrow .arrow {
-  display: inline-block;
-  transition: transform 380ms cubic-bezier(0.2, 0.7, 0.2, 1);
-}
-.btn-arrow:hover .arrow { transform: translateX(4px); }
-
-/* Primary CTA: filled, but quiet. */
+/* ---------- buttons ---------- */
 .btn-primary {
   display: inline-flex;
   align-items: center;
-  gap: 0.7rem;
-  background: var(--color-ink);
-  color: var(--color-paper);
-  padding: 0.85rem 1.4rem 0.85rem 1.5rem;
-  font-family: var(--font-sans);
-  font-size: 14px;
-  font-weight: 500;
-  letter-spacing: 0.01em;
+  justify-content: center;
+  gap: 0.6rem;
+  background: var(--color-pine);
+  color: var(--color-cream);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 0.9rem 1.7rem;
   border-radius: 999px;
-  transition: background 240ms, transform 240ms;
+  transition: background 200ms ease, transform 200ms ease;
 }
-.btn-primary:hover { background: var(--color-accent-deep); }
-.btn-primary .arrow { transition: transform 380ms cubic-bezier(0.2, 0.7, 0.2, 1); }
-.btn-primary:hover .arrow { transform: translateX(4px); }
+.btn-primary:hover { background: var(--color-clay-deep); }
+.btn-primary:active { transform: scale(0.98); }
 
-/* ---------- reveal animation ---------- */
-@keyframes reveal-in {
-  from { opacity: 0; transform: translateY(14px); }
-  to   { opacity: 1; transform: none; }
+.btn-secondary {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.6rem;
+  background: transparent;
+  color: var(--color-pine);
+  font-weight: 600;
+  font-size: 15px;
+  padding: 0.9rem 1.7rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--color-pine);
+  transition: background 200ms ease, color 200ms ease;
+}
+.btn-secondary:hover { background: var(--color-pine); color: var(--color-cream); }
+
+/* Light variants for dark (pine) sections. */
+.btn-primary--light { background: var(--color-cream); color: var(--color-pine); }
+.btn-primary--light:hover { background: var(--color-clay-tint); }
+
+.text-link {
+  color: var(--color-clay-deep);
+  font-weight: 600;
+  text-decoration: underline;
+  text-decoration-thickness: 1.5px;
+  text-underline-offset: 3px;
+  text-decoration-color: rgba(176, 111, 79, 0.35);
+  transition: text-decoration-color 180ms;
+}
+.text-link:hover { text-decoration-color: var(--color-clay); }
+
+/* ---------- portrait placeholder ---------- */
+/* Arched frame — swap the inner content for a real photo when available. */
+.portrait-arch {
+  position: relative;
+  border-radius: 999px 999px 24px 24px;
+  overflow: hidden;
+  background:
+    radial-gradient(120% 90% at 30% 15%, rgba(138, 155, 133, 0.35), transparent 60%),
+    radial-gradient(110% 100% at 80% 90%, rgba(176, 111, 79, 0.18), transparent 55%),
+    var(--color-surface-deep);
+  border: 1px solid var(--color-line);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.portrait-arch .label {
+  font-size: 12px;
+  font-weight: 600;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: var(--color-muted);
+  background: var(--color-cream);
+  border: 1px solid var(--color-line);
+  border-radius: 999px;
+  padding: 0.4rem 0.9rem;
 }
 
+/* ---------- cards ---------- */
+.card {
+  background: var(--color-cream);
+  border: 1px solid var(--color-line-soft);
+  border-radius: 20px;
+  transition: border-color 200ms ease, transform 200ms ease, box-shadow 200ms ease;
+}
+.card--hover:hover {
+  border-color: var(--color-line);
+  transform: translateY(-3px);
+  box-shadow: 0 12px 32px -18px rgba(44, 58, 49, 0.25);
+}
+
+/* ---------- reveal on scroll ---------- */
 .reveal {
-  animation: reveal-in 900ms cubic-bezier(0.16, 0.84, 0.32, 1) both;
-  will-change: opacity, transform;
+  opacity: 0;
+  transform: translateY(18px);
+  transition: opacity 700ms cubic-bezier(0.16, 0.84, 0.32, 1),
+    transform 700ms cubic-bezier(0.16, 0.84, 0.32, 1);
 }
-.reveal-delay-1 { animation-delay: 90ms; }
-.reveal-delay-2 { animation-delay: 180ms; }
-.reveal-delay-3 { animation-delay: 270ms; }
-.reveal-delay-4 { animation-delay: 360ms; }
+.reveal.is-visible {
+  opacity: 1;
+  transform: none;
+}
 
 @media (prefers-reduced-motion: reduce) {
-  .reveal { animation: none; }
-  .btn-arrow .line, .btn-arrow:hover .arrow,
-  .btn-primary .arrow { transition: none; }
+  html { scroll-behavior: auto; }
+  .reveal { opacity: 1; transform: none; transition: none; }
+  .btn-primary, .btn-secondary { transition: none; }
 }
 
-/* ---------- accordion ---------- */
+/* ---------- FAQ accordion ---------- */
 details.faq {
-  border-top: 1px solid var(--color-rule);
-  padding: 1.5rem 0;
-}
-details.faq:last-of-type {
-  border-bottom: 1px solid var(--color-rule);
+  border-bottom: 1px solid var(--color-line);
 }
 details.faq > summary {
   list-style: none;
   cursor: pointer;
   display: flex;
-  gap: 2rem;
   align-items: baseline;
   justify-content: space-between;
+  gap: 1.5rem;
+  padding: 1.4rem 0;
 }
 details.faq > summary::-webkit-details-marker { display: none; }
 details.faq > summary .q {
   font-family: var(--font-display);
-  font-weight: 400;
-  font-size: clamp(1.15rem, 1.05rem + 0.4vw, 1.45rem);
-  letter-spacing: -0.01em;
+  font-weight: 500;
+  font-size: clamp(1.1rem, 1rem + 0.4vw, 1.3rem);
   color: var(--color-ink);
-  line-height: 1.2;
+  line-height: 1.3;
 }
 details.faq > summary .mark {
-  font-family: var(--font-mono);
-  font-size: 12px;
-  letter-spacing: 0.18em;
-  color: var(--color-ink-soft);
-  text-transform: uppercase;
   flex-shrink: 0;
-  padding-top: 0.25rem;
+  width: 1.6rem;
+  height: 1.6rem;
+  border-radius: 999px;
+  border: 1.5px solid var(--color-line);
+  color: var(--color-pine);
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 15px;
+  transition: transform 250ms ease, background 200ms ease;
 }
-details.faq[open] > summary .mark::after { content: "close"; }
-details.faq:not([open]) > summary .mark::after { content: "open"; }
+details.faq[open] > summary .mark {
+  transform: rotate(45deg);
+  background: var(--color-surface);
+}
 details.faq > .a {
-  margin-top: 0.9rem;
   max-width: var(--measure);
-  color: var(--color-ink-mid);
+  padding: 0 0 1.5rem;
+  color: var(--color-body);
 }
 
 /* ---------- form ---------- */
-.field {
-  border: 0;
-  border-bottom: 1px solid var(--color-rule);
-  padding: 0.85rem 0;
-}
 .field label {
   display: block;
-  font-family: var(--font-mono);
-  font-size: 11px;
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
-  color: var(--color-ink-soft);
-  margin-bottom: 0.5rem;
+  font-size: 13.5px;
+  font-weight: 600;
+  color: var(--color-ink);
+  margin-bottom: 0.4rem;
 }
 .field input,
 .field textarea {
   width: 100%;
-  background: transparent;
-  border: 0;
-  outline: 0;
-  font-family: var(--font-display);
-  font-weight: 400;
-  font-size: 1.4rem;
+  background: var(--color-cream);
+  border: 1.5px solid var(--color-line);
+  border-radius: 12px;
+  padding: 0.8rem 1rem;
+  font-size: 15.5px;
   color: var(--color-ink);
+  outline: none;
+  transition: border-color 180ms ease;
   resize: vertical;
 }
 .field input::placeholder,
-.field textarea::placeholder {
-  color: var(--color-ink-faint);
-  font-style: italic;
-}
-.field:focus-within { border-bottom-color: var(--color-accent); }
-.field input:disabled,
-.field textarea:disabled {
-  color: var(--color-ink-faint);
-  cursor: not-allowed;
-}
+.field textarea::placeholder { color: var(--color-muted); }
+.field input:focus,
+.field textarea:focus { border-color: var(--color-sage); outline: none; }
+.field .error { border-color: #b3543f; }
+.field .error-msg { color: #9c4632; font-size: 13px; margin-top: 0.35rem; }
 
 /* ---------- print ---------- */
 @media print {
-  body::before { display: none; }
   .reveal { opacity: 1; transform: none; }
 }
