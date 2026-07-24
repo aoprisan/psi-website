@@ -1,5 +1,6 @@
 import { Link } from "react-router-dom";
 import { nav, site } from "@/lib/site";
+import { LogoMark } from "@/components/ui/Logo";
 import { withPh } from "@/components/ui/Ph";
 
 export function Footer() {
@@ -11,6 +12,7 @@ export function Footer() {
         {/* Top — identity + crisis note. */}
         <div className="grid gap-12 md:grid-cols-[1.3fr_1fr] pb-14">
           <div>
+            <LogoMark size={48} leaf="#e8b48f" className="mb-5 text-[color:var(--color-cream)]" />
             <p className="font-[family-name:var(--font-display)] text-[clamp(1.8rem,3vw,2.4rem)] text-[color:var(--color-cream)]">
               {site.name}
             </p>
