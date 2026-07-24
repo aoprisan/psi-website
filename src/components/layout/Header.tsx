@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { Link, NavLink, useLocation } from "react-router-dom";
 import { nav, site } from "@/lib/site";
+import { LogoMark } from "@/components/ui/Logo";
 
 export function Header() {
   const [open, setOpen] = useState(false);
@@ -33,21 +34,7 @@ export function Header() {
     >
       <div className="mx-auto flex max-w-[var(--shell-max)] items-center justify-between px-6 md:px-10 py-4 md:py-5">
         <Link to="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
-          {/* Mark — a leaf inside a soft circle. */}
-          <span
-            aria-hidden
-            className="flex h-10 w-10 items-center justify-center rounded-full bg-[color:var(--color-surface-deep)] text-[color:var(--color-pine)]"
-          >
-            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
-              <path
-                d="M12 21C6 16.5 5 10.5 7.5 6.5 10 2.5 15 2 18 4c0 0 .5 6-2 11s-4 6-4 6z"
-                stroke="currentColor"
-                strokeWidth="1.6"
-                strokeLinejoin="round"
-              />
-              <path d="M12 21c0-6 2-11 5-15" stroke="currentColor" strokeWidth="1.2" />
-            </svg>
-          </span>
+          <LogoMark size={40} className="shrink-0 text-[color:var(--color-pine)]" />
           <span className="flex flex-col leading-tight">
             <span className="font-[family-name:var(--font-display)] text-[1.2rem] font-medium text-[color:var(--color-ink)]">
               {site.name}
