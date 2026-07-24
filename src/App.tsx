@@ -10,6 +10,11 @@ import { FAQ } from "@/pages/FAQ";
 import { Contact } from "@/pages/Contact";
 import { Privacy } from "@/pages/Privacy";
 import { NotFound } from "@/pages/NotFound";
+import { ResourcesHub } from "@/pages/resources/ResourcesHub";
+import { Screeners } from "@/pages/resources/Screeners";
+import { Breathing } from "@/pages/resources/Breathing";
+import { Grounding } from "@/pages/resources/Grounding";
+import { Journal } from "@/pages/resources/Journal";
 
 export function App() {
   return (
@@ -25,6 +30,12 @@ export function App() {
             <Route path="/servicii" element={<Services />} />
             <Route path="/cum-lucrez" element={<Approach />} />
             <Route path="/intrebari-frecvente" element={<FAQ />} />
+            <Route path="/resurse" element={<ResourcesHub />} />
+            <Route path="/resurse/chestionare" element={<Screeners />} />
+            <Route path="/resurse/chestionare/:slug" element={<Screeners />} />
+            <Route path="/resurse/respiratie" element={<Breathing />} />
+            <Route path="/resurse/ancorare" element={<Grounding />} />
+            <Route path="/resurse/jurnal" element={<Journal />} />
             <Route path="/contact" element={<Contact />} />
             <Route path="/confidentialitate" element={<Privacy />} />
             <Route path="*" element={<NotFound />} />
