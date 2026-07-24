@@ -1,36 +1,54 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Liliana Oprișan — site de prezentare
 
-## Getting Started
+Site profesional pentru un cabinet de psihologie clinică și psihoterapie
+specializat în terapia traumei. Construit cu Vite + React + Tailwind CSS,
+cu build-uri mobile prin Capacitor.
 
-First, run the development server:
+## Pagini
+
+| Rută | Pagină |
+| --- | --- |
+| `/` | Acasă — hero, arii de lucru, servicii, proces, FAQ |
+| `/despre` | Despre mine — bio, valori, formare & acreditări |
+| `/servicii` | Servicii & tarife |
+| `/cum-lucrez` | Abordare, metode, prima ședință, etică |
+| `/intrebari-frecvente` | Întrebări frecvente |
+| `/contact` | Formular de contact, date cabinet |
+| `/confidentialitate` | Politica de confidențialitate (GDPR) |
+
+## Conținut și placeholders
+
+Tot textul care așteaptă informații reale este scris `[între paranteze
+drepte]` și apare evidențiat vizual pe site. Datele centrale (nume, oraș,
+telefon, e-mail, tarife, formări) se completează în **`src/lib/site.ts`** —
+restul paginilor se actualizează automat.
+
+De făcut înainte de lansare:
+
+- [ ] Completat datele din `src/lib/site.ts` (contact, tarife, atestat CPR)
+- [ ] Înlocuit placeholder-ele de portret cu fotografii reale
+- [ ] Completat bio-ul și formările pe pagina „Despre mine”
+- [ ] Conectat formularul de contact la un serviciu de e-mail (ex. Formspree)
+- [ ] Adăugat harta pe pagina de contact
+- [ ] Revizuit politica de confidențialitate cu un specialist
+- [ ] Setat domeniul real în `src/lib/site.ts` și `vite.config.ts` (base)
+
+## Dezvoltare
 
 ```bash
-npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
+npm install
+npm run dev        # http://localhost:3000
+npm run build      # build web (bază /psi-website/ pentru GitHub Pages)
+npm run typecheck
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+Fonturile (Fraunces, Figtree) sunt self-hosted prin Fontsource — nu se fac
+cereri către Google Fonts (GDPR) și funcționează offline în aplicația mobilă.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Mobile (Capacitor)
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
-
-## Learn More
-
-To learn more about Next.js, take a look at the following resources:
-
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
-
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
-
-## Deploy on Vercel
-
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
-
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+```bash
+npm run cap:sync
+npm run build:android
+npm run build:ios
+```

@@ -1,47 +1,26 @@
-import { useDocumentTitle } from "@/lib/useDocumentTitle";
+import { Section } from "@/components/ui/Section";
 import { Button } from "@/components/ui/Button";
-import { Reveal } from "@/components/ui/Reveal";
+import { useDocumentTitle } from "@/lib/useDocumentTitle";
+import { site } from "@/lib/site";
 
 export function NotFound() {
-  useDocumentTitle("Not found");
+  useDocumentTitle(`Pagina nu a fost găsită · ${site.name}`);
 
   return (
-    <section className="pt-28 md:pt-40 pb-28">
-      <div className="mx-auto max-w-[var(--shell-max)] px-6 md:px-10">
-        <Reveal>
-          <p className="eyebrow eyebrow-accent">404</p>
-        </Reveal>
-        <Reveal delay={1}>
-          <h1
-            className="display mt-10"
-            style={{
-              fontSize: "clamp(2.8rem, 7vw, 6rem)",
-              lineHeight: 0.98,
-            }}
-          >
-            We can&apos;t find that page,
-            <br />
-            <em>but you&apos;re here.</em>
-          </h1>
-        </Reveal>
-        <Reveal delay={2}>
-          <p
-            className="mt-10 max-w-[34rem] text-[color:var(--color-ink-mid)]"
-            style={{ fontSize: "1.1rem", lineHeight: 1.65 }}
-          >
-            The page you&apos;re looking for doesn&apos;t exist, or it
-            may have moved. Try the homepage, or reach out directly.
-          </p>
-        </Reveal>
-        <Reveal delay={3}>
-          <div className="mt-12 flex flex-wrap gap-8 items-center">
-            <Button to="/" variant="primary">
-              Back home
-            </Button>
-            <Button to="/contact">Contact</Button>
-          </div>
-        </Reveal>
+    <Section spacing="loose">
+      <div className="mx-auto max-w-xl text-center">
+        <p className="eyebrow">Eroare 404</p>
+        <h1 className="display mt-4 text-[clamp(2.2rem,1.8rem+2vw,3.4rem)]">
+          Pagina pe care o cauți nu există
+        </h1>
+        <p className="mt-5 text-[16.5px] leading-relaxed">
+          Este posibil ca adresa să fi fost scrisă greșit sau ca pagina să fi
+          fost mutată. Te invit înapoi pe pagina principală.
+        </p>
+        <div className="mt-8">
+          <Button to="/">Înapoi la pagina principală</Button>
+        </div>
       </div>
-    </section>
+    </Section>
   );
 }

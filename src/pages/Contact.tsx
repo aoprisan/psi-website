@@ -1,181 +1,211 @@
-import { useDocumentTitle } from "@/lib/useDocumentTitle";
+import { useState, type FormEvent } from "react";
+import { Link } from "react-router-dom";
 import { Section } from "@/components/ui/Section";
+import { PageHero } from "@/components/ui/PageHero";
 import { Reveal } from "@/components/ui/Reveal";
+import { withPh } from "@/components/ui/Ph";
+import { useDocumentTitle } from "@/lib/useDocumentTitle";
 import { site } from "@/lib/site";
 
+type Errors = Partial<Record<"name" | "email" | "message" | "gdpr", string>>;
+
 export function Contact() {
-  useDocumentTitle(`Contact — ${site.practitionerName}`);
+  useDocumentTitle(`Contact & programări · ${site.name}`);
+  const [errors, setErrors] = useState<Errors>({});
+  const [sent, setSent] = useState(false);
+
+  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+    e.preventDefault();
+    const data = new FormData(e.currentTarget);
+    const next: Errors = {};
+    if (!String(data.get("name") ?? "").trim()) next.name = "Te rog să îți scrii numele.";
+    const email = String(data.get("email") ?? "").trim();
+    if (!email) next.email = "Te rog să scrii o adresă de e-mail.";
+    else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email))
+      next.email = "Adresa de e-mail nu pare validă.";
+    if (!String(data.get("message") ?? "").trim())
+      next.message = "Scrie, te rog, câteva cuvinte despre ce te aduce.";
+    if (!data.get("gdpr"))
+      next.gdpr = "Pentru a trimite mesajul, este necesar acordul de prelucrare a datelor.";
+    setErrors(next);
+    if (Object.keys(next).length === 0) {
+      // Form submission endpoint not configured yet — placeholder success state.
+      setSent(true);
+    }
+  }
 
   return (
     <>
-      <section className="pt-16 md:pt-28 pb-12">
-        <div className="mx-auto max-w-[var(--shell-max)] px-6 md:px-10">
+      <PageHero
+        eyebrow="Contact & programări"
+        title={
+          <>
+            Primul pas poate fi <em>un simplu mesaj</em>
+          </>
+        }
+        lead={withPh(
+          "Scrie-mi prin formular, prin e-mail sau sună-mă. Îți răspund personal, de regulă în [24–48 de ore], în deplină confidențialitate.",
+        )}
+      />
+
+      <Section>
+        <div className="grid gap-12 lg:grid-cols-[1.1fr_0.9fr]">
+          {/* ---------- Form ---------- */}
           <Reveal>
-            <p className="eyebrow eyebrow-accent">C / Contact</p>
-          </Reveal>
-          <Reveal delay={1}>
-            <h1
-              className="display mt-10"
-              style={{
-                fontSize: "clamp(2.6rem, 6.5vw, 5.8rem)",
-                lineHeight: 0.98,
-                maxWidth: "16ch",
-              }}
-            >
-              The first step is{" "}
-              <em>a short conversation</em>.
-            </h1>
-          </Reveal>
-          <Reveal delay={2}>
-            <p
-              className="mt-10 max-w-[40rem] text-[color:var(--color-ink-mid)]"
-              style={{ fontSize: "1.15rem", lineHeight: 1.65 }}
-            >
-              A free 15-minute consultation call is a low-pressure
-              way to ask questions, share a little about what brings
-              you in, and see if it feels like a fit. There&apos;s no
-              commitment to continue beyond it.
-            </p>
-          </Reveal>
-        </div>
-      </section>
-
-      <Section index="C / Get in touch" spacing="default">
-        <div className="grid gap-16 md:gap-20 md:grid-cols-12">
-          {/* Left: contact details */}
-          <Reveal as="div" className="md:col-span-5">
-            <dl className="space-y-10">
-              <div>
-                <dt className="eyebrow">By email</dt>
-                <dd className="mt-3">
-                  <a
-                    href={`mailto:${site.email}`}
-                    className="font-display text-[color:var(--color-ink)] under-link"
-                    style={{ fontSize: "1.7rem" }}
-                  >
-                    {site.email}
-                  </a>
-                </dd>
-              </div>
-              <div>
-                <dt className="eyebrow">By phone</dt>
-                <dd className="mt-3">
-                  <a
-                    href={`tel:${site.phone.replace(/\D/g, "")}`}
-                    className="font-display text-[color:var(--color-ink)] under-link"
-                    style={{ fontSize: "1.7rem" }}
-                  >
-                    {site.phone}
-                  </a>
-                </dd>
-              </div>
-              <div>
-                <dt className="eyebrow">Office</dt>
-                <dd
-                  className="mt-3 text-[color:var(--color-ink)] not-italic font-display"
-                  style={{ fontSize: "1.25rem", lineHeight: 1.45 }}
+            {sent ? (
+              <div className="card p-10 text-center" role="status">
+                <span
+                  aria-hidden
+                  className="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-[color:var(--color-surface-deep)] text-[color:var(--color-pine)] text-2xl"
                 >
-                  {site.address.street}
-                  <br />
-                  {site.address.city}, {site.address.state} {site.address.zip}
-                </dd>
-              </div>
-              <div>
-                <dt className="eyebrow">Hours</dt>
-                <dd
-                  className="mt-3 text-[color:var(--color-ink-mid)]"
-                  style={{ fontSize: "0.95rem" }}
-                >
-                  Monday – Thursday, by appointment.
-                  <br />
-                  In-person and telehealth.
-                </dd>
-              </div>
-            </dl>
-
-            <p
-              className="mt-14 text-[color:var(--color-ink-soft)] max-w-[28rem]"
-              style={{ fontSize: "0.85rem", lineHeight: 1.7 }}
-            >
-              Please do not include sensitive clinical information in
-              your first message. Email is not a secure channel — we
-              will move to a phone or video call quickly.
-            </p>
-          </Reveal>
-
-          {/* Right: editorial form */}
-          <Reveal as="div" className="md:col-span-7" delay={1}>
-            <form
-              className="border border-[color:var(--color-rule)] bg-[color:var(--color-paper-deep)] p-8 md:p-12"
-              onSubmit={(e) => e.preventDefault()}
-            >
-              <div className="flex items-baseline justify-between gap-4 mb-10">
-                <p className="eyebrow eyebrow-accent">Send a note</p>
-                <p
-                  className="font-mono text-[10px] tracking-[0.22em] uppercase text-[color:var(--color-ink-faint)]"
-                >
-                  Skeleton — not yet wired
+                  ✓
+                </span>
+                <h2 className="mt-5 text-[1.6rem]">Mulțumesc pentru mesaj!</h2>
+                <p className="mx-auto mt-3 max-w-md text-[15.5px] leading-relaxed">
+                  {withPh("Îți voi răspunde în cel mai scurt timp, de regulă în [24–48 de ore]. Verifică, te rog, și folderul Spam.")}
                 </p>
               </div>
-
-              <div className="space-y-2">
-                <div className="field">
-                  <label htmlFor="c-name">Your name</label>
-                  <input
-                    id="c-name"
-                    name="name"
-                    type="text"
-                    placeholder="First Last"
-                    disabled
-                  />
+            ) : (
+              <form onSubmit={handleSubmit} noValidate className="card p-7 md:p-9">
+                <h2 className="text-[1.5rem]">Trimite un mesaj</h2>
+                <p className="mt-2 text-[14.5px] text-[color:var(--color-muted)]">
+                  Câmpurile marcate cu * sunt obligatorii.
+                </p>
+                <div className="mt-7 grid gap-5 sm:grid-cols-2">
+                  <div className="field">
+                    <label htmlFor="name">Nume și prenume *</label>
+                    <input
+                      id="name"
+                      name="name"
+                      type="text"
+                      autoComplete="name"
+                      className={errors.name ? "error" : ""}
+                      aria-invalid={!!errors.name}
+                      aria-describedby={errors.name ? "name-err" : undefined}
+                    />
+                    {errors.name && (
+                      <p className="error-msg" id="name-err">{errors.name}</p>
+                    )}
+                  </div>
+                  <div className="field">
+                    <label htmlFor="email">E-mail *</label>
+                    <input
+                      id="email"
+                      name="email"
+                      type="email"
+                      autoComplete="email"
+                      className={errors.email ? "error" : ""}
+                      aria-invalid={!!errors.email}
+                      aria-describedby={errors.email ? "email-err" : undefined}
+                    />
+                    {errors.email && (
+                      <p className="error-msg" id="email-err">{errors.email}</p>
+                    )}
+                  </div>
                 </div>
-                <div className="field">
-                  <label htmlFor="c-email">Email</label>
-                  <input
-                    id="c-email"
-                    name="email"
-                    type="email"
-                    placeholder="you@example.com"
-                    disabled
-                  />
+                <div className="field mt-5">
+                  <label htmlFor="phone">Telefon (opțional)</label>
+                  <input id="phone" name="phone" type="tel" autoComplete="tel" />
                 </div>
-                <div className="field">
-                  <label htmlFor="c-msg">A brief message</label>
+                <div className="field mt-5">
+                  <label htmlFor="message">Mesajul tău *</label>
                   <textarea
-                    id="c-msg"
+                    id="message"
                     name="message"
                     rows={5}
-                    placeholder="A sentence or two about what you're looking for."
-                    disabled
+                    placeholder="Poți scrie pe scurt ce te aduce sau doar că dorești o programare."
+                    className={errors.message ? "error" : ""}
+                    aria-invalid={!!errors.message}
+                    aria-describedby={errors.message ? "message-err" : undefined}
                   />
+                  {errors.message && (
+                    <p className="error-msg" id="message-err">{errors.message}</p>
+                  )}
                 </div>
-              </div>
-
-              <div className="mt-10 flex items-center justify-between gap-6 flex-wrap">
-                <button
-                  type="submit"
-                  disabled
-                  aria-disabled="true"
-                  className="btn-primary"
-                  style={{
-                    background: "var(--color-ink-faint)",
-                    cursor: "not-allowed",
-                  }}
-                >
-                  <span>Send message</span>
-                  <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden>
-                    <path d="M1 5h12m0 0L9 1m4 4L9 9" stroke="currentColor" strokeWidth="1.25" strokeLinecap="square" />
-                  </svg>
+                <div className="mt-6">
+                  <label className="flex items-start gap-3 text-[14px] leading-relaxed">
+                    <input
+                      type="checkbox"
+                      name="gdpr"
+                      className="mt-1 h-4 w-4 accent-[color:var(--color-pine)]"
+                      aria-invalid={!!errors.gdpr}
+                      aria-describedby={errors.gdpr ? "gdpr-err" : undefined}
+                    />
+                    <span>
+                      Sunt de acord cu prelucrarea datelor mele personale în
+                      scopul de a fi contactat(ă), conform{" "}
+                      <Link to="/confidentialitate" className="text-link">
+                        politicii de confidențialitate
+                      </Link>
+                      . *
+                    </span>
+                  </label>
+                  {errors.gdpr && (
+                    <p className="error-msg" id="gdpr-err">{errors.gdpr}</p>
+                  )}
+                </div>
+                <button type="submit" className="btn-primary mt-7 w-full sm:w-auto">
+                  Trimite mesajul
                 </button>
-                <p
-                  className="text-[color:var(--color-ink-soft)]"
-                  style={{ fontSize: "0.85rem", maxWidth: "20rem" }}
-                >
-                  For now, please email or call directly. The form is
-                  placeholder until it&apos;s wired to a secure endpoint.
+                <p className="mt-4 text-[13px] leading-relaxed text-[color:var(--color-muted)]">
+                  Notă: formularul nu este încă conectat la un serviciu de
+                  e-mail — {withPh("[configurare Formspree / backend — de completat]")}.
                 </p>
+              </form>
+            )}
+          </Reveal>
+
+          {/* ---------- Details ---------- */}
+          <Reveal delay={120} className="space-y-6">
+            <div className="card p-7">
+              <h2 className="text-[1.3rem]">Date de contact</h2>
+              <ul className="mt-4 space-y-3 text-[15.5px]">
+                <li>
+                  <span className="block text-[13px] font-semibold uppercase tracking-[0.12em] text-[color:var(--color-muted)]">
+                    E-mail
+                  </span>
+                  {withPh(site.email)}
+                </li>
+                <li>
+                  <span className="block text-[13px] font-semibold uppercase tracking-[0.12em] text-[color:var(--color-muted)]">
+                    Telefon
+                  </span>
+                  {withPh(site.phone)}
+                </li>
+                <li>
+                  <span className="block text-[13px] font-semibold uppercase tracking-[0.12em] text-[color:var(--color-muted)]">
+                    Program
+                  </span>
+                  {withPh(site.schedule)}
+                </li>
+              </ul>
+            </div>
+
+            <div className="card p-7">
+              <h2 className="text-[1.3rem]">Cabinetul</h2>
+              <address className="mt-3 not-italic text-[15.5px] leading-relaxed">
+                {withPh(site.address)}
+              </address>
+              <div className="mt-5 flex aspect-[16/10] items-center justify-center rounded-xl border border-dashed border-[color:var(--color-line)] bg-[color:var(--color-surface)]">
+                <span className="text-[13px] font-semibold uppercase tracking-[0.12em] text-[color:var(--color-muted)]">
+                  Hartă — de adăugat
+                </span>
               </div>
-            </form>
+              <p className="mt-4 text-[14px] leading-relaxed text-[color:var(--color-muted)]">
+                {withPh("[Indicații de acces: parcare, transport public, interfon etc. — de completat.]")}
+              </p>
+            </div>
+
+            <div className="rounded-2xl border border-[color:var(--color-clay-tint)] bg-[color:var(--color-clay-tint)]/40 p-6 text-[14.5px] leading-relaxed">
+              <p className="font-semibold text-[color:var(--color-clay-deep)]">
+                În caz de urgență
+              </p>
+              <p className="mt-2">
+                Acest formular nu este monitorizat permanent. Dacă treci
+                printr-o criză, sună la <strong>112</strong> sau la linia
+                antisuicid <strong>0800 801 200</strong>.
+              </p>
+            </div>
           </Reveal>
         </div>
       </Section>

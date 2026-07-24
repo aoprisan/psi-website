@@ -25,36 +25,40 @@ export function Header() {
 
   return (
     <header
-      className={`sticky top-0 z-40 transition-[background,border-color,backdrop-filter] duration-300 ${
-        scrolled
-          ? "bg-[color:var(--color-paper)]/82 backdrop-blur-md border-b border-[color:var(--color-rule-soft)]"
+      className={`sticky top-0 z-40 transition-[background,border-color,box-shadow] duration-300 ${
+        scrolled || open
+          ? "bg-[color:var(--color-ground)]/90 backdrop-blur-md border-b border-[color:var(--color-line-soft)]"
           : "bg-transparent border-b border-transparent"
       }`}
     >
-      <div className="mx-auto flex max-w-[var(--shell-max)] items-center justify-between px-6 md:px-10 py-5 md:py-6">
-        <Link
-          to="/"
-          className="flex flex-col leading-none"
-          onClick={() => setOpen(false)}
-        >
+      <div className="mx-auto flex max-w-[var(--shell-max)] items-center justify-between px-6 md:px-10 py-4 md:py-5">
+        <Link to="/" className="flex items-center gap-3" onClick={() => setOpen(false)}>
+          {/* Mark — a leaf inside a soft circle. */}
           <span
-            className="font-display"
-            style={{ fontSize: "1.35rem", letterSpacing: "-0.01em", fontWeight: 500 }}
+            aria-hidden
+            className="flex h-10 w-10 items-center justify-center rounded-full bg-[color:var(--color-surface-deep)] text-[color:var(--color-pine)]"
           >
-            {site.practitionerName}
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+              <path
+                d="M12 21C6 16.5 5 10.5 7.5 6.5 10 2.5 15 2 18 4c0 0 .5 6-2 11s-4 6-4 6z"
+                stroke="currentColor"
+                strokeWidth="1.6"
+                strokeLinejoin="round"
+              />
+              <path d="M12 21c0-6 2-11 5-15" stroke="currentColor" strokeWidth="1.2" />
+            </svg>
           </span>
-          <span
-            className="eyebrow mt-1"
-            style={{ fontSize: "9.5px", letterSpacing: "0.22em" }}
-          >
-            {site.credentialsShort}
+          <span className="flex flex-col leading-tight">
+            <span className="font-[family-name:var(--font-display)] text-[1.2rem] font-medium text-[color:var(--color-ink)]">
+              {site.name}
+            </span>
+            <span className="text-[11.5px] font-semibold uppercase tracking-[0.14em] text-[color:var(--color-muted)]">
+              {site.titleShort}
+            </span>
           </span>
         </Link>
 
-        <nav
-          className="hidden md:flex items-center gap-9"
-          aria-label="Primary"
-        >
+        <nav className="hidden lg:flex items-center gap-7" aria-label="Meniu principal">
           {nav
             .filter((n) => n.to !== "/")
             .map((item) => (
@@ -62,50 +66,38 @@ export function Header() {
                 key={item.to}
                 to={item.to}
                 className={({ isActive }) =>
-                  `text-[13px] tracking-wide transition-colors ${
+                  `text-[14.5px] font-medium transition-colors ${
                     isActive
-                      ? "text-[color:var(--color-accent)]"
-                      : "text-[color:var(--color-ink)] hover:text-[color:var(--color-accent)]"
+                      ? "text-[color:var(--color-clay-deep)]"
+                      : "text-[color:var(--color-ink)] hover:text-[color:var(--color-clay-deep)]"
                   }`
                 }
               >
-                <span className="under-link">{item.label}</span>
+                {item.label}
               </NavLink>
             ))}
           <Link
             to="/contact"
             className="btn-primary"
-            style={{ padding: "0.7rem 1.1rem", fontSize: "13px" }}
+            style={{ padding: "0.6rem 1.2rem", fontSize: "14px" }}
           >
-            <span>Consultation</span>
-            <svg
-              width="12"
-              height="9"
-              viewBox="0 0 14 10"
-              fill="none"
-              aria-hidden
-            >
-              <path
-                d="M1 5h12m0 0L9 1m4 4L9 9"
-                stroke="currentColor"
-                strokeWidth="1.25"
-                strokeLinecap="square"
-              />
-            </svg>
+            Programează o ședință
           </Link>
         </nav>
 
         <button
-          className="md:hidden inline-flex items-center gap-2 text-[color:var(--color-ink)]"
-          aria-label={open ? "Close menu" : "Open menu"}
+          className="lg:hidden inline-flex items-center gap-2 text-[color:var(--color-ink)]"
+          aria-label={open ? "Închide meniul" : "Deschide meniul"}
           aria-expanded={open}
           aria-controls="mobile-nav"
           onClick={() => setOpen((v) => !v)}
         >
-          <span className="eyebrow">{open ? "Close" : "Menu"}</span>
+          <span className="text-[13px] font-semibold uppercase tracking-[0.12em]">
+            {open ? "Închide" : "Meniu"}
+          </span>
           <span
             aria-hidden
-            className="inline-block w-7 h-[1px] bg-current"
+            className="inline-block w-6 h-[1.5px] bg-current"
             style={{
               boxShadow: open
                 ? "0 0 0 transparent"
@@ -120,50 +112,31 @@ export function Header() {
       {open && (
         <nav
           id="mobile-nav"
-          className="md:hidden fixed inset-x-0 top-[72px] bottom-0 bg-[color:var(--color-paper)] z-30"
-          aria-label="Primary mobile"
+          className="lg:hidden fixed inset-x-0 top-[73px] bottom-0 bg-[color:var(--color-ground)] z-30 overflow-y-auto"
+          aria-label="Meniu principal mobil"
         >
-          <ul className="flex flex-col px-6 pt-8 pb-12 gap-1">
-            {nav.map((item, i) => (
-              <li
-                key={item.to}
-                className="border-b border-[color:var(--color-rule-soft)]"
-              >
+          <ul className="flex flex-col px-6 pt-6 pb-8">
+            {nav.map((item) => (
+              <li key={item.to} className="border-b border-[color:var(--color-line-soft)]">
                 <NavLink
                   to={item.to}
                   end={item.to === "/"}
                   className={({ isActive }) =>
-                    `flex items-baseline justify-between py-5 ${
+                    `block py-4 font-[family-name:var(--font-display)] text-[1.6rem] ${
                       isActive
-                        ? "text-[color:var(--color-accent)]"
+                        ? "text-[color:var(--color-clay-deep)]"
                         : "text-[color:var(--color-ink)]"
                     }`
                   }
                 >
-                  <span
-                    className="font-display"
-                    style={{ fontSize: "2rem", fontWeight: 400 }}
-                  >
-                    {item.label}
-                  </span>
-                  <span className="eyebrow" style={{ fontSize: "10px" }}>
-                    0{i + 1}
-                  </span>
+                  {item.label}
                 </NavLink>
               </li>
             ))}
           </ul>
-          <div className="px-6 mt-6">
-            <Link to="/contact" className="btn-primary">
-              <span>Book consultation</span>
-              <svg width="14" height="10" viewBox="0 0 14 10" fill="none" aria-hidden>
-                <path
-                  d="M1 5h12m0 0L9 1m4 4L9 9"
-                  stroke="currentColor"
-                  strokeWidth="1.25"
-                  strokeLinecap="square"
-                />
-              </svg>
+          <div className="px-6">
+            <Link to="/contact" className="btn-primary w-full">
+              Programează o ședință
             </Link>
           </div>
         </nav>
