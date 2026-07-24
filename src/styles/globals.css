@@ -307,6 +307,49 @@ details.faq > .a {
 .field .error { border-color: #b3543f; }
 .field .error-msg { color: #9c4632; font-size: 13px; margin-top: 0.35rem; }
 
+/* ---------- breathing pacer ---------- */
+.breath-stage {
+  position: relative;
+  width: min(78vw, 19rem);
+  height: min(78vw, 19rem);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+.breath-circle {
+  position: absolute;
+  inset: 0;
+  border-radius: 999px;
+  background:
+    radial-gradient(circle at 35% 30%, rgba(138, 155, 133, 0.55), transparent 65%),
+    radial-gradient(circle at 70% 75%, rgba(176, 111, 79, 0.25), transparent 60%),
+    var(--color-surface-deep);
+  border: 1.5px solid var(--color-line);
+  transform: scale(0.72);
+  transition-property: transform;
+  transition-timing-function: cubic-bezier(0.45, 0, 0.55, 1);
+  will-change: transform;
+}
+.breath-circle--idle {
+  transition-duration: 600ms !important;
+}
+.breath-readout {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  text-align: center;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  /* No scaling animation — the label and countdown carry the pacing. */
+  .breath-circle {
+    transition: none !important;
+    transform: scale(0.85) !important;
+  }
+}
+
 /* ---------- print ---------- */
 @media print {
   .reveal { opacity: 1; transform: none; }

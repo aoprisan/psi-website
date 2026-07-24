@@ -162,6 +162,41 @@ export function Home() {
         </ol>
       </Section>
 
+      {/* ---------- Resources teaser ---------- */}
+      <Section tone="surface" className="rounded-[2.5rem] mx-2 md:mx-4">
+        <div className="grid items-center gap-10 lg:grid-cols-[1fr_1.1fr]">
+          <Reveal>
+            <SectionHeading
+              eyebrow="Resurse interactive"
+              title="Instrumente gratuite, direct în browser"
+              lead="Chestionare de autoevaluare validate științific, exerciții ghidate de respirație și ancorare, plus un jurnal de stare complet privat. Nimic din ce faci acolo nu părăsește dispozitivul tău."
+            />
+            <Button to="/resurse" variant="secondary">
+              Explorează resursele
+            </Button>
+          </Reveal>
+          <Reveal delay={120}>
+            <ul className="grid gap-4 sm:grid-cols-2">
+              {[
+                ["Autoevaluare", "GAD-7 · PHQ-9 · PC-PTSD-5, cu rezultat imediat", "/resurse/chestionare"],
+                ["Respirație ghidată", "Trei tehnici cu ghidaj vizual, 3–5 minute", "/resurse/respiratie"],
+                ["Ancorare 5-4-3-2-1", "Exercițiu de grounding din terapia traumei", "/resurse/ancorare"],
+                ["Jurnal privat", "Starea ta, pe 30 de zile — doar pe dispozitivul tău", "/resurse/jurnal"],
+              ].map(([title, text, to]) => (
+                <li key={to}>
+                  <Link to={to} className="card card--hover block h-full p-5">
+                    <h3 className="text-[1.02rem]">{title}</h3>
+                    <p className="mt-1.5 text-[13.5px] leading-relaxed text-[color:var(--color-body)]">
+                      {text}
+                    </p>
+                  </Link>
+                </li>
+              ))}
+            </ul>
+          </Reveal>
+        </div>
+      </Section>
+
       {/* ---------- FAQ teaser ---------- */}
       <Section>
         <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr]">

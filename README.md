@@ -12,6 +12,11 @@ cu build-uri mobile prin Capacitor.
 | `/despre` | Despre mine — bio, valori, formare & acreditări |
 | `/servicii` | Servicii & tarife |
 | `/cum-lucrez` | Abordare, metode, prima ședință, etică |
+| `/resurse` | Resurse interactive — hub |
+| `/resurse/chestionare` | Chestionare de autoevaluare (GAD-7, PHQ-9, PC-PTSD-5), scorate local |
+| `/resurse/respiratie` | Respirație ghidată (coerentă, 4 timpi, 4-7-8) |
+| `/resurse/ancorare` | Exercițiul de grounding 5-4-3-2-1 |
+| `/resurse/jurnal` | Jurnal de stare privat (doar localStorage, export & ștergere) |
 | `/intrebari-frecvente` | Întrebări frecvente |
 | `/contact` | Formular de contact, date cabinet |
 | `/confidentialitate` | Politica de confidențialitate (GDPR) |
@@ -32,6 +37,25 @@ De făcut înainte de lansare:
 - [ ] Adăugat harta pe pagina de contact
 - [ ] Revizuit politica de confidențialitate cu un specialist
 - [ ] Setat domeniul real în `src/lib/site.ts` și `vite.config.ts` (base)
+
+## Resurse interactive (confidențialitate prin design)
+
+Secțiunea `/resurse` oferă instrumente care rulează integral în browser,
+fără backend — nimic nu este transmis sau colectat:
+
+- **Chestionare validate** — GAD-7, PHQ-9 și PC-PTSD-5 (instrumente în
+  domeniul public), scorate pe dispozitiv, cu interpretare, disclaimer
+  („screening, nu diagnostic”) și ghidaj de criză când e cazul. Rezultatul
+  poate pre-completa formularul de contact (via `sessionStorage`, șters
+  imediat după citire).
+- **Respirație ghidată** — pacer vizual pentru respirația coerentă, în
+  patru timpi și 4-7-8; respectă `prefers-reduced-motion`.
+- **Ancorare 5-4-3-2-1** — exercițiu de grounding pas cu pas, doar în
+  memorie.
+- **Jurnal de stare** — salvat exclusiv în `localStorage`, cu grafic pe
+  30 de zile, export ca fișier text și ștergere completă.
+
+Toate funcționează offline în aplicația mobilă (Capacitor).
 
 ## Dezvoltare
 

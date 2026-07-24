@@ -6,6 +6,7 @@ import { Reveal } from "@/components/ui/Reveal";
 import { withPh } from "@/components/ui/Ph";
 import { useDocumentTitle } from "@/lib/useDocumentTitle";
 import { site } from "@/lib/site";
+import { takeContactPrefill } from "@/lib/screeners";
 
 type Errors = Partial<Record<"name" | "email" | "message" | "gdpr", string>>;
 
@@ -13,6 +14,9 @@ export function Contact() {
   useDocumentTitle(`Contact & programări · ${site.name}`);
   const [errors, setErrors] = useState<Errors>({});
   const [sent, setSent] = useState(false);
+  // Message pre-filled from a screener result, if the visitor arrived
+  // from a results screen. Read once, then cleared from sessionStorage.
+  const [prefill] = useState(() => takeContactPrefill());
 
   function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
@@ -112,7 +116,8 @@ export function Contact() {
                   <textarea
                     id="message"
                     name="message"
-                    rows={5}
+                    rows={prefill ? 8 : 5}
+                    defaultValue={prefill}
                     placeholder="Poți scrie pe scurt ce te aduce sau doar că dorești o programare."
                     className={errors.message ? "error" : ""}
                     aria-invalid={!!errors.message}
